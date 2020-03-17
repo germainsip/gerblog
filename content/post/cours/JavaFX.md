@@ -1,22 +1,21 @@
 ---
-title: "JavaFX et sauvegarde Partie 1"
-date: 2020-03-16T16:05:18+01:00
+title: JavaFX et sauvegarde Partie 1
+date: 2020-03-16T15:05:18.000Z
 draft: false
-description: "Example article description"
+description: Example article description
 categories:
-  - "JavaFX"
-  - "Persistance"
+  - JavaFX
+  - Persistance
 tags:
-  - "JavaFX"
-  - "Json"
-  - "Jackson"
-
-thumbnail: "img/storage.png"
-lead: "Didacticiel sur la persistance" # Lead text
-comments: false # Enable Disqus comments for specific page
-authorbox: true # Enable authorbox for specific page
-toc: true # Enable Table of Contents for specific page
-mathjax: true # Enable MathJax for specific page
+  - JavaFX
+  - Json
+  - Jackson
+thumbnail: img/construction.jpg
+lead: Didacticiel sur la persistance
+comments: false
+authorbox: true
+toc: true
+mathjax: true
 ---
 
 :exclamation: :exclamation: :exclamation: **en cours de rédaction** :exclamation: :exclamation: :exclamation:
@@ -234,3 +233,5 @@ public Client(String nom, String prenom, Integer age) {
 ## On alimente et on affiche
 
 J'aurais pu faire autrement mais je vais utiliser l'implémentation de l'interface `Initializable` qui ajoute une méthode à l'appelle du controlleur.
+
+
