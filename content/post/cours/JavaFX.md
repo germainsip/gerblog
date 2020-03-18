@@ -1,8 +1,8 @@
 ---
 title: JavaFX et sauvegarde Partie 1
 date: 2020-03-16T15:05:18.000Z
-draft: false
-description: Example article description
+draft: true
+description: Didacticiel sur la persistance
 categories:
   - JavaFX
   - Persistance
@@ -59,12 +59,12 @@ Votre projet devrait avoir l'arborescence suivante.
 │   ├── org
 │   │   └── afpa
 │   │       ├── App.java
-│   │       └── ExempleController.java
+│   │       └── Exemplejson.java
 │   └── module-info.java
 └── resources
     └── org
         └── afpa
-            └── exemple.fxml
+            └── exemplejson.fxml
 ```
 
 Pour le **fxml**, nous allons simplement ajouter un bouton et des label.
@@ -132,19 +132,19 @@ Pour le **fxml**, nous allons simplement ajouter un bouton et des label.
 >
 > ![arbo](/img/JavaFX_Json/jfxjson2.png)
 
-Nommez les 3 label afin de les récupérer dans notre appli (`nomLabel`, `prenomLabel`, `ageLabel`). Et ajoutez une méthode au bouton que nous appelons `sauvButn`.
+Nommez les 3 label afin de les récupérer dans notre appli (`labelNom`, `labelPrenom`, `labelAge`). Et ajoutez une méthode au bouton que nous appelons `sauvBut`.
 
-> si vous utilisez les automatismes de IntelliJ vos label seront déclarés comme ceci `public Label nomLabel;`. Je vais les lier avec l'annotation `@FXML` et les rendre `private` pour respecter le fxml et l'encapsulation.
+> si vous utilisez les automatismes de IntelliJ vos label seront déclarés comme ceci `public Label labelNom;`. Je vais les lier avec l'annotation `@FXML` et les rendre `private` pour respecter le fxml et l'encapsulation.
 
 ```java
 @FXML
-private Button sauvBtn;
+private Label labelNom;
 @FXML
-private Label nomLabel;
+private Label labelPrenom;
 @FXML
-private Label prenomLabel;
+private Label labelAge;
 @FXML
-private Label ageLabel;
+private Button sauvBut;
 
 @FXML
 private void sauvHandler(ActionEvent event) {
@@ -232,6 +232,21 @@ public Client(String nom, String prenom, Integer age) {
 
 ## On alimente et on affiche
 
-J'aurais pu faire autrement mais je vais utiliser l'implémentation de l'interface `Initializable` qui ajoute une méthode à l'appelle du controlleur.
+J'aurais pu faire autrement mais je vais utiliser l'implémentation de l'interface `Initializable` qui ajoute une méthode `initilize` à l'appelle du controlleur. Cela donne ceci après création et alimentation des champs:
+
+```java
+@Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Client cli1 = new Client("Paul","Auchon",35);
+
+        labelNom.setText(cli1.getNom());
+        labelPrenom.setText(cli1.getPrenom());
+        labelAge.setText(String.valueOf(cli1.getAge()));
+    }
+```
+
+Maintenant il ne vous reste qu'à lancer l'afficahge de nos préparatifs pour voir si tout fonctionne.
+
+> Dans la prochaine partie nous verrons comment sauvegarder notre objet dans un json.
 
 
