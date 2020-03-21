@@ -1,7 +1,7 @@
 ---
 title: JavaFX et sauvegarde Partie 1
 date: 2020-03-16T15:05:18.000Z
-draft: true
+draft: false
 description: Didacticiel sur la persistance
 categories:
   - JavaFX
@@ -10,7 +10,7 @@ tags:
   - JavaFX
   - Json
   - Jackson
-thumbnail: img/construction.jpg
+thumbnail: img/jfxjsonhead.png
 lead: Didacticiel sur la persistance
 comments: false
 authorbox: true
@@ -18,13 +18,19 @@ toc: true
 mathjax: true
 ---
 
-:exclamation: :exclamation: :exclamation: **en cours de rédaction** :exclamation: :exclamation: :exclamation:
+
 
 ## Sauvegardons des données en Json
 
 Plusieurs bibliothèques existent pour exploiter le Json avec Java. Je vous propose d'en essayer 2. Nous utiliserons Json.simple et Jackson. La première est très simple d'utilisation comme son nom l'indique et la deuxième nous donnera plus d'outils pour la gestion de nos objets. Je prend le partie de vous montrer l'application de ces outils avec JavaFX car le **bind** sera particulier dans ce cas.
 
-## Commenceons par l'interface graphique
+{{< youtube kyIImhr4sHU >}}
+
+
+## Commençons par l'interface graphique
+
+
+
 
 Créez un projet dans l'IDE de votre choix. J'utiliserai IntelliJ mais les manipulations sont les mêmes dans Netbeans.
 
