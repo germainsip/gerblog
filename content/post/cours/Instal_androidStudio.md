@@ -32,6 +32,8 @@ Lancez alors la procédure d'installation en suivant les instructions.
 
 ## Émulation d'un mobile
 
+**prérequis:** votre BIOS doit permette la virtualisation
+
 Après avoir installé **Android Studio** il vous faudra créer un émulateur mobile.
 
 > passez à la section utiliser mon mobile Android si votre ordinateur a une trop petit config pour faire de l'émulation.

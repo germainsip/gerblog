@@ -7,8 +7,8 @@ enableEmoji = true
 
 [Author]
   name = "Germain SIPIERE"
-  bio = "Germain SIPIERE, formateur en conception et développement d'applications à l'AFPA"
-  avatar = "img/telephone.jpg"
+  bio = "Germain SIPIERE, formateur en conception et développement d'applications à l'AFPA. J'utilise différentes technologies et j'adore en découvrir continuelement de nouvelles"
+  avatar = "img/moi.jpg"
 
 [Params]
   subtitle = "Site de partage de ressources" # Subtitle of your site. Used in site header
@@ -16,7 +16,7 @@ enableEmoji = true
   copyright = "Germain SIPIERE" # Footer copyright holder, otherwise will use site title
   opengraph = true # Enable OpenGraph if true
   twitter_cards = true # Enable Twitter Cards if true
-  readmore = false # Show "Read more" button in list if true
+  readmore = true # Show "Read more" button in list if true
   authorbox = true # Show authorbox at bottom of pages if true
   toc = true # Enable Table of Contents
   post_navigation = true # Show post navigation at bottom of pages if true
