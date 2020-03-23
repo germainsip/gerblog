@@ -1,7 +1,7 @@
 ---
 title: Installation d'Android Studio
 date: 2020-03-19T10:25:49.000Z
-draft: true
+draft: false
 description: Didacticiel sur androidStudio
 categories:
   - Android
@@ -14,7 +14,6 @@ lead: Installation de l'environnement de dev
 comments: false
 authorbox: true
 toc: true
-
 ---
 ## Android Studio, c'est quoi?
 
@@ -32,13 +31,26 @@ Lancez alors la procédure d'installation en suivant les instructions.
 
 ## Émulation d'un mobile
 
+Après avoir installé **Android Studio** il vous faudra créer un émulateur mobile.
 **prérequis:** votre BIOS doit permette la virtualisation
 
-Après avoir installé **Android Studio** il vous faudra créer un émulateur mobile.
+<!-- > passez à la section utiliser mon mobile Android si votre ordinateur a une trop petit config pour faire de l'émulation. -->
 
-> passez à la section utiliser mon mobile Android si votre ordinateur a une trop petit config pour faire de l'émulation.
+Au premier démarrage vous aurez cette fenêtre:
 
-## Utiliser son mobile Android
+![config1](/img/android/confAnd.png)    ![config2](/img/android/confAnd2.png)
 
-Il faut d'abord passer son mobile en mode développeur:
+sélectionnez **Configure** et **AVD Manager**. C'est là que vous aller créer votre mobile virtuel.
+
+- Créez un nouveau mobile virtuel ![new](/img/android/newAnd.png)
+- Choisissez une version de mobile ![mob](/img/android/newAnd2.png)
+- Choisissez une version d'OS ![os](/img/android/newAnd3.png)
+- Choisissez un nom ![machine](/img/android/newAnd4.png)
+
+Et voilà vous êtes prêt.
+
+
+<!-- ## Utiliser son mobile Android
+
+Il faut d'abord passer son mobile en mode développeur: -->
 
