@@ -1,5 +1,9 @@
 {
     "frontMatter.taxonomy.categories": [
-        "Android"
+        "Android",
+        "Flutter"
+    ],
+    "frontMatter.taxonomy.tags": [
+        "Flutter"
     ]
 }
