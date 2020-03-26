@@ -137,4 +137,5 @@ Insérez une balise `<ScrolView>`et mettez le TextView de l'article dedans. Puis
 ```
 
 Ajoutez aussi l'attribut dans les attributs du `TextView`
+
 A partir de maintenant notre article scroll et le lien hypertext est actif.
