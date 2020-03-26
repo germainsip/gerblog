@@ -7,7 +7,7 @@ categories:
 tags:
   - Flutter
 
-thumbnail: img/flutter/flut_dart.png
+thumbnail: img/flutter/flutt_dart.png
 lead: Introduction à Flutter en passant par Dart
 comments: false
 authorbox: true

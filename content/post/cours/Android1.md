@@ -158,6 +158,5 @@ La condition if n'était pas obligatoire ici car nous n'avons qu'un élément mu
 
 Voilà il ne vous reste plus qu'à tester.
 
-> La prochaine fois nous verrons les **intent** et comment créer d'autre vues. A bientôt.
 
 `
