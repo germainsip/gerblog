@@ -7,6 +7,7 @@ categories:
   - Android
 tags:
   - Android
+  - ScrollView
 thumbnail: img/androidbase.png
 lead: Vues texte et défilements en android (en cours de rédaction)
 comments: false
@@ -139,3 +140,66 @@ Insérez une balise `<ScrolView>`et mettez le TextView de l'article dedans. Puis
 Ajoutez aussi l'attribut dans les attributs du `TextView`
 
 A partir de maintenant notre article scroll et le lien hypertext est actif.
+
+Le sous titre ne scroll pas avec le reste! Le `ScrollView` ne peut prendre qu'un seul enfant, cependant nous pouvons imbriquer un `ViewGroup` dans le `ScrollView`.
+
+## Inclusion dans un `ViewGroup`
+
+C'est très simple nous allons ajouter une balise ouvrante et fermante <RelativeLayout> y inclure nos 2 `TextView` enlever la contrainte du sous-titre et modifier celle du `ScrollView`. Enfin définissez le `LinearLayout`sur vertical.
+
+Voici le xml que vous devriez avoir:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/article_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_regular"
+        android:text="@string/titre_de_l_article"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/article_heading">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/article_sub_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/sous_titre_article"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault" />
+
+            <TextView
+                android:id="@+id/article"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:lineSpacingExtra="@dimen/line_spacing"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/texte_de_l_article" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
+```
+
+Lancez l'app et le tour est Joué.
