@@ -9,7 +9,7 @@ tags:
   - Android
   - ScrollView
 thumbnail: img/androidbase.png
-lead: Vues texte et défilements en android (en cours de rédaction)
+lead: Vues texte et défilements en android
 comments: false
 authorbox: true
 toc: true
@@ -114,7 +114,9 @@ Cette chaine est similaire à du **html** pour le gras et l'italique, faites bie
 
 ## Et le Scroll alors ?
 
-> La vidéo arrive bientôt ici
+{{< youtube VSBjfV6ttzI >}}
+___
+___
 
 Si vous avez testé votre application, vous avez surement remarqué que pour le moment rien ne scroll et que le lien vers www.rockument.com et inactif.
 
@@ -202,6 +204,6 @@ Voici le xml que vous devriez avoir:
 </RelativeLayout>
 ```
 
-Remarquez que j'ai aussi ajouté l'attribut `android:autoLink="web"` dans l'article afin que le lien web soit actif.
+> Remarquez que j'ai aussi ajouté l'attribut `android:autoLink="web"` dans l'article afin que le lien web soit actif.
 
 Lancez l'app et le tour est Joué.
