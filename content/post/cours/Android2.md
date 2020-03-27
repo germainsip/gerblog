@@ -202,4 +202,6 @@ Voici le xml que vous devriez avoir:
 </RelativeLayout>
 ```
 
+Remarquez que j'ai aussi ajouté l'attribut `android:autoLink="web"` dans l'article afin que le lien web soit actif.
+
 Lancez l'app et le tour est Joué.
