@@ -1,7 +1,7 @@
 ---
-title: "Voyage entre les Intent"
-date: 2020-03-27T11:57:32+01:00
-draft: true
+title: Voyage entre les Intent
+date: 2020-03-27T10:57:32.000Z
+draft: false
 description: Les intent d'android
 categories:
   - Android
@@ -18,7 +18,10 @@ toc: true
 
 Nous avons vue que les vues étaient appelées des activités en Android. Afin d'ouvrir une nouvelle activité et transférer des information d'une activité à l'autre nous allons avoir besoin des `Intent` qui vont permettre de faire naviguer des informations d'une vue à l'autre.
 
-> vidéo en cours d'upload
+{{< youtube I7FUF1ROA5g>}}
+
+---
+---
 
 Nous allons faire une simple application qui dans un premier temps ouvrira une deuxième activité au clique sur un bouton et dans un deuxième temps nous verrons comment envoyer un message sur la deuxième activité puis enfin renvoyer une réponse sur la première.
 
@@ -104,7 +107,7 @@ dans `activity_second.xml` faite la mise en page suivante en ajoutant un TextVie
 
 Enfin dans `MainActivity.java` créez l'**intent** dan la méthode `launchSecondActivity()`
 
-L'intent prend deux paramètres, le context et la classe de l'activité à charger.
+L'`intent` prend deux paramètres, le `context` et la classe de l'activité à charger.
 
 `Intent intent = new Intent(this, SecondActivity.class);`
 
@@ -112,5 +115,55 @@ Il faut ensuite démarrer l'activité: `startActivity(intent);`
 
 Vous pouvez maintenant lancer votre activité.
 
+## Envoyons un message (partie 2)
+
+> video partie 2
+
+Notre objet d'intention peut transmettre des données à l'activité cible de deux manières: dans le champ de données ou dans les extras d' intention . Les données d'intention sont un URI indiquant les données spécifiques sur lesquelles agir. Si les informations que vous souhaitez transmettre à une activité via une intention ne sont pas un URI, ou si vous avez plusieurs informations à envoyer, vous pouvez mettre ces informations supplémentaires dans les extras à la place.
+
+Les **extras** d' intention sont des paires **clé / valeur** dans un Bundle (paquet). Un `Bundle` est une collection de données, stockées sous forme de paires **clé / valeur**. Pour transmettre des informations d'une activité à une autre, vous mettez des clés et des valeurs dans l'extra de l'intention de l'activité d'envoi, puis vous les récupérez dans l'activité de réception.
+
+Commencez par ajouter un `EditText` à notre premier layout et nommez le `editText_main`
+
+> les indications du champ text sont dans l'attribut `android:hint=" ... "`
+
+Définissez la clé "Extra" de l'intent et l'`EditText` en haut de la classe `MainActivity`
+
+```java
+public static final String EXTRA_MESSAGE = "deuxActivite.extra.MESSAGE";
+private EditText mEditTextMessage;
+```
+Dans la méthode `onCreate()` on va récupérer notre EditText:
 
 
+```java
+ mEditTextMessage = findViewById(R.id.edit_text_message);
+```
+
+Et dans la méthode `launchSecondActivity()` on va créer notre message "extra" et l'ajouter à l'intent
+
+
+```java
+String message = mEditTextMessage.getText().toString();
+Intent intent = new Intent(this, SecondActivity.class);
+intent.putExtra(EXTRA_MESSAGE,message);
+startActivity(intent);
+```
+
+## De l'autre côté
+
+Dans `activity_second.xml` ajoutez un `TextView` afin de pouvoir répondre. Nommez le `text_message`
+
+Dans `SecondActivity.java`, dans la méthode onCreate(), récupérons notre intent ainsi que son contenu et mettons le dans le TextView:
+
+```java
+Intent intent = getIntent();
+
+String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+
+TextView textView = findViewById(R.id.text_message);
+
+textView.setText(message);
+```
+
+Vous pouvez tester votre appli.
