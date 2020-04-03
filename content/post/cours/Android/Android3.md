@@ -179,7 +179,7 @@ Vous pouvez tester votre appli.
 ---
 
 Nous allons maintenant faire le sens retour. Ajoutons un champ `EditText` et un `Button` à notre second layout (`activity_second.xml`).
-Vous pouvez simplement copier coller les deux éléments de la première acitvité et corriger les id et actions pour obtenir ceci:
+Vous pouvez simplement copier coller les deux éléments de la première activité et corriger les id et actions pour obtenir ceci:
 
 ```xml
 <Button
