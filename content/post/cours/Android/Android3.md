@@ -54,6 +54,7 @@ Exécutez votre appli. Si tout se déroule bien au clique sur le bouton vous dev
 ```zsh
 D/MainActivity: clique sur bouton
 ```
+
 > la méthode log est l'équivalent en Java du println que nous utilisons pour faire des impressions en console. La grosse différence est que nous signons nos événements par une String.
 
 ## Créons la seconde activité
@@ -225,7 +226,6 @@ Vous pouvez simplement copier coller les deux éléments de la première activit
 
 Dans notre contrôleur nous allons ajouter un `Intent` et son extra ainsi que l'action à effectuer:
 
-
 ```java
 public class SecondActivity extends AppCompatActivity {
 
@@ -268,7 +268,6 @@ public class SecondActivity extends AppCompatActivity {
 Ajoutez le `Textview` pour la réponse par copié collé et modification adéquate.
 
 Vous devriez obtenir le xml suivant à ajouter dans `activity_main.xml` :
-
 
 ```xml
 <TextView
@@ -342,5 +341,4 @@ Maintenant surchargeons la méthode `onActivityResult` avec nos conditions. C'es
         }
 ```
 
-Et c'est tout! Maintenant, si vous lancez l'application vous devez pouvoir faire voyager des messages d'un côté à l'autre.
-
+Et c'est tout! Maintenant, si vous lancez l'application vous devez pouvoir faire voyager des messages d'un côté à l'autre :coffee:.
