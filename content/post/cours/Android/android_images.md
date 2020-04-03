@@ -60,3 +60,6 @@ Vous devriez avoir:
 
 et visuellement
 
+![donut1](/img/android/ajoutDonut.png)
+
+Ajoutez une description en attribut et envoyez la dans les `strings.xml`
