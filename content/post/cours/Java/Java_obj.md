@@ -18,3 +18,8 @@ mathjax: true
 ## Java le tout objet ou presque :coffee:
 
 
+Commençons simplement, vous connaissez déjà les types si vous avez utilisé des langages comme php ou javascript. Notamment le type String qui n'est pas un type primitif en fait.
+
+Le String est un objet. Il admet des données membres et des méthodes (fonctions).
+
+Java
