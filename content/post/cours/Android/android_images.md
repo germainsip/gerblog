@@ -9,7 +9,7 @@ tags:
   - Android
   - design
 thumbnail: img/androidbase.png
-lead: Ajoutons des images à nos applications (en cours de rédaction)
+lead: Ajoutons des images à nos applications
 comments: false
 authorbox: true
 toc: true
@@ -22,9 +22,7 @@ toc: true
 ---
 ---
 
-:hourglass_flowing_sand:  Article en cours de rédaction  :hourglass_flowing_sand:
-
-Téléchargez ces [images](/download/droidCafe.zip) ou utilisez les votres. Nous allons les intégrer à une application avec des images cliquables.
+Téléchargez ces [images](/download/droidCafe.zip) ou utilisez les vôtres. Nous allons les intégrer à une application avec des images cliquables.
 
 Créez un projet qui s'appel "Droid Cafe" en choisissant **Basic Activity** cette fois ci.
 
@@ -181,5 +179,51 @@ Commençons par écrire nos messages dans `strings.xml`
 Dans `MainActivity` ajoutons la métohde `displayToast()`.
 
 ```java
-
+public void displayToast(String message){
+    Toast.makeText(getApplicationContext(), message,Toast.LENGTH_SHORT).show();
+    }
 ```
+
+Cette méthode va afficher un toast en bas de l'écran reprenant le message que nous voulons afficher.
+> Remarquez que makeText prend 3 paramètres: le `context`, le message et le type d'alerte.
+
+On va maintenant définir les méthodes liées à nos boutons. J'en écris une, à vous d'écrire les autres.
+
+```java
+/**
+     * Affiche un message disant que le donut a été sélectionné
+     * @param view
+     */
+    public void showDonutOrder(View view){
+        displayToast(getString(R.string.donut_order_message));
+    }
+```
+
+Enfin nous allons lier nos images aux méthodes en ajoutant l'attribut `onClick` à nos images.
+
+```xml
+android:onClick="showDonutOrder"
+```
+
+Faites ça pour les 3 images.
+
+## Une nouvelle activité
+
+Pour le principe, nous avons un `FloatingActionButton` alors on va l'utiliser.
+Ajoutez une nouvelle activité et nommez la `OrderActivity.java`
+
+Modifiez la méthode onClick() pour obtenir:
+
+```java
+ fab.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(MainActivity.this,OrderActivity.class);
+        startActivity(intent);
+            }
+        });
+```
+
+Ainsi, maintenant, quand on clique sur le fab. On ouvre une nouvelle activité.
+
+> Dans la vidéo je vous montre comment changer son aspect également.
