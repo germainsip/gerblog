@@ -17,9 +17,10 @@ toc: true
 
 {{<youtube bdx9MwiD76M>}}
 
-
 ---
+
 :hand: en cours de rédaction :hand:
+
 ---
 
 ## Ça sert à quoi une API?
@@ -48,7 +49,7 @@ On va commencer par créer une base une base de donnée.
 ```sql
 CREATE DATABASE api_db;
 
-USE api_db
+USE api_db;
 ```
 
 Créer la table `categories`
@@ -114,7 +115,7 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `cr
 (60, 'Rolex Watch', 'Luxury watch.', '25000', 1, '2016-01-11 15:46:02', '2016-01-11 14:46:02');
 ```
 
-Vous pouvez aussi télécharger le script de création [ici](download/ma_base.sql).
+Vous pouvez aussi télécharger le script de création [ici](/download/ma_base.sql).
 
 ## Connectons nous à la base donnée
 
@@ -123,7 +124,73 @@ Puis, créons le fichier `database.php` qui va nous permettre de nous connecter.
 
 **database.php**
 
+``` PHP
+<?php
+class Database {
+   // On spécifie les coordonnées de connexion
+   private $host = "locahost";
+   private $db_name = "api_db";
+   private $dsn ;
+   private $username = "root";
+   private $password = "Grm1";
+   public $conn;
+
+   // connection à la base
+   public function getConnection() {
+
+       $this->conn = null;
+       $this->dsn = "mysql:host=". $this->host. ";dbname=" . $this->db_name;
+       try{
+           $this->conn = new PDO($this->dsn, $this->username, $this->password);
+       $this->conn ->exec("set names utf8");
+       } catch (PDOException $exception) {
+           echo "Conneciton error: " . $exception->getMessage();
+       }
+       return $this->conn;
+   }
+}
+```
+
+## Accédons à nos produits
+
+On va créer une classe pour nos produits:
+
+- Dans le dossier `api` créez un dossier `objects` et dans ce dossier créez la classe `product.php`
 
 ```php
+<?php
+class product {
 
+    // connexion à la base
+    private $conn;
+    private $table_name = "products";
+
+    // membres de l'objet
+    public $id;
+    public $name;
+    public $description;
+    public $price;
+    public $categorie_id;
+    public $category_name;
+    public $created;
+
+    // un constructeur avec $db comme connexion à la base
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+}
+?>
+```
+
+Il nous faut aussi un fichier pour lire nos objets:
+
+Ajoutez dans le dossier `product` un fichier `read.php`
+
+D'abord il nous faut les headers:
+
+```php
+<?php
+// Les headers dont nous avons besoin
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
 ```
