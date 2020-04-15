@@ -119,7 +119,7 @@ Vous pouvez aussi télécharger le script de création [ici](/download/ma_base.s
 
 ## Connectons nous à la base donnée (Partie 2)
 
-{{ partie 2}}
+{{<youtube t34fVoy4Bbs>}}
 
 Notre projet aura cette forme à la fin de cette partie:
 
@@ -237,7 +237,7 @@ On va lire les résultats de la méthode `read()`de `Product`
 ...
 // le query
 $stmt = $product->read();
-$num = $stmt-rowCount();
+$num = $stmt->rowCount();
 
 // on regarde si on a plus d'un résultat
 if($num>0){
@@ -282,7 +282,7 @@ public function read() {
   // requête select avec jointure
   $query = "SELECT
             c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created
-            FROM"
+            FROM "
            . $this->table_name . " p
             LEFT JOIN
             categories c ON p.category_id = c.id
