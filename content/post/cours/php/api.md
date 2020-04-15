@@ -117,7 +117,22 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `cr
 
 Vous pouvez aussi télécharger le script de création [ici](/download/ma_base.sql).
 
-## Connectons nous à la base donnée
+## Connectons nous à la base donnée (Partie 2)
+
+{{ partie 2}}
+
+Notre projet aura cette forme à la fin de cette partie:
+
+``` cmd
+api
+├── config
+│   └── database.php
+├── objects
+│   └── product.php
+└── product
+    └── read.php
+
+```
 
 Dans le dossier `api` que vous avez créé dans le dossier de votre serveur. Créons un dossier `config`.
 Puis, créons le fichier `database.php` qui va nous permettre de nous connecter.
@@ -128,14 +143,15 @@ Puis, créons le fichier `database.php` qui va nous permettre de nous connecter.
 <?php
 class Database {
    // On spécifie les coordonnées de connexion
-   private $host = "locahost";
+   private $host = "localhost";
    private $db_name = "api_db";
    private $dsn ;
    private $username = "root";
-   private $password = "Grm1";
+   private $password = "VOTRE_MOT_DE_PASSE";
    public $conn;
 
-   // connection à la base
+
+   // connexion à la base
    public function getConnection() {
 
        $this->conn = null;
@@ -159,7 +175,7 @@ On va créer une classe pour nos produits:
 
 ```php
 <?php
-class product {
+class Product {
 
     // connexion à la base
     private $conn;
@@ -194,3 +210,348 @@ D'abord il nous faut les headers:
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 ```
+
+On prépare la connection en incluant nos import et en instanciant nos objets:
+
+```php
+<?php
+
+// ... le code qui précède dans read.php
+
+// inclusion de database et product
+include_once '../config/database.php';
+include_once '../objects/product.php';
+
+// instanciation de database et de product
+$database = new Database();
+$db = $database->getConnection();
+
+// On initialise product
+$product = new Product($db);
+```
+
+On va lire les résultats de la méthode `read()`de `Product`
+
+```php
+<?php
+...
+// le query
+$stmt = $product->read();
+$num = $stmt-rowCount();
+
+// on regarde si on a plus d'un résultat
+if($num>0){
+
+    // tableau de produits
+    $products_arr = array();
+    $products_arr["records"]=array();
+
+    // on récupère le contenu de la table
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        extract($row);
+
+        $product_item = array(
+            "id" => $id,
+            "name" => $name,
+            "description" => $price,
+            "category_id" => $category_id,
+            "category_name" => $category_name
+        );
+
+        array_push($products_arr["records"], $product_item);
+    }
+
+    // on envoie la réponse http à 200 OK
+    http_response_code(200);
+
+    // on renvoie la réponse en Json
+    echo json_encode($products_arr);
+
+}
+```
+
+Il nous faut maintenant ajouter la méthode `read()` à `Product.php`
+
+```php
+<?php
+
+...
+
+// lecture des produits
+public function read() {
+  // requête select avec jointure
+  $query = "SELECT
+            c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created
+            FROM"
+           . $this->table_name . " p
+            LEFT JOIN
+            categories c ON p.category_id = c.id
+            ORDER BY
+            p.created DESC";
+
+  // on prépare la requête
+  $stmt = $this->conn->prepare($query);
+
+  // on execute la requête
+  $stmt->execute();
+
+  return $stmt;
+}
+```
+
+Et on va avertir l'utilisateur si aucun produit n'a été trouvé.
+
+A la suite de notre `if` dans `read.php`
+
+```php
+<?php
+//fin du if
+else {
+// on renvoie le code 404 Not found
+    http_response_code(404);
+
+// On averti l'utilisateur
+    echo json_encode(array("message"=> "Aucun produits trouvés."));
+}
+
+```
+
+Il ne vous reste qu'à tester tout ça avec Postman ou Insomnia.
+
+Dans le client entre l'adresse `localhost/api/product/read.php` et validez par **send**
+
+## Créons des produits (Partie 3)
+
+C'est le **C** de CRUD.
+
+L'accès va se faire via le fichier `create.php` dans le dossier `product`
+
+```php
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods:POST");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-Width");
+
+
+// on se connecte à la base
+include_once '../config/database.php';
+
+// l'objet product
+include_once '../objects/product.php';
+
+$database = new Database();
+$db = $database->getConnection();
+
+$product = new Product($db);
+
+// on récupère les données du post
+$data = json_decode(file_get_contents("php://input"));
+
+// on s'assure que ce n'est pas vide
+if (
+        !empty($data->name) &&
+        !empty($data->price) &&
+        !empty($data->description) &&
+        !empty($data->category_id)
+) {
+    $product->name = $data->name;
+    $product->price = $data->price;
+    $product->description = $data->description;
+    $product->category_id = $data->category_id;
+    $product->created = date('Y-m-d H:i:s');
+
+    if ($product->create()) {
+
+        //on envoie le code 201
+        http_response_code(201);
+
+        // on averti l'utilisateur
+        echo json_encode(array("message" => "Produit Créé."));
+    } else {
+        // on envoie le code 503
+        http_response_code(503);
+        // on averti l'utilisateur
+        echo json_encode(["message" => "Impossible de créer le produit!"]);
+    }
+} else {
+    // on envoie le code 400 - bad request
+    http_response_code(400);
+    // on averti l'utilisateur
+    echo json_encode(["message" => "Impossible de créer le produit! les données sont incomplètes!"]);
+}
+```
+
+On va aussi ajouter la méthode `create()` à `product.php
+
+
+```php
+<?php
+
+...
+
+public function create() {
+        // requête d'insertion
+        $query = "INSERT INTO
+                " . $this->table_name . "
+            SET
+                name=:name, price=:price, description=:description, category_id=:category_id, created=:created";
+        // on prépare la requête
+        $stmt = $this->conn->prepare($query);
+
+        //nettoyage
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->price = htmlspecialchars(strip_tags($this->price));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+        $this->created = htmlspecialchars(strip_tags($this->created));
+
+        // on bind
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":price", $this->price);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":category_id", $this->category_id);
+        $stmt->bindParam(":created", $this->created);
+
+        // on lance la requête
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+```
+
+Verifiez que tout fonctionne avec postman ou insomnia à l'adresse `localhost/api/product/create.php` en ajoutant au body le Json:
+
+```json
+{
+    "name" : "Mega oreiller 2.0",
+    "price" : "199",
+    "description" : "Le meilleur oreiller pour des programmeurs incroyables.",
+    "category_id" : 2,
+    "created" : "2018-06-01 00:35:07"
+}
+```
+
+Et voilà !!!
+
+![insomnia](/img/insomnia.png)
+
+## Un seul objet (Partie 4)
+
+Afin de lire un seul enregistrement, on va se donner un accé.
+Créons le fichier `read_one.php` dans le dossier `product`.
+
+```php
+<?php
+
+
+
+// les headers
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: access");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Credentials: true");
+header('Content-Type: application/json');
+
+// les inclusions
+include_once '../config/database.php';
+include_once '../objects/product.php';
+
+// on se connecte
+$database = new Database();
+$db = $database->getConnection();
+
+$product = new Product($db);
+
+// Récupérons l'id de l'objet à lire
+$product->id = isset($_GET['id']) ? $_GET['id'] : die();
+
+// on lit les détails du produit
+$product->readOne();
+if ($product->name != null) {
+    // création d'un tableau
+    $product_arr[] = ["id" => $product->id,
+        "name" => $product->name,
+        "description" => $product->description,
+        "price" => $product->price,
+        "category" => $product->category_id,
+        "category_name" => $product->category_name];
+    // requête ok 200
+    http_response_code(200);
+
+    //On traduit ça en Json
+    echo json_encode($product_arr);
+} else{
+    http_response_code(404);
+    echo json_encode(["message"=>"Ce produit n'éxiste pas!"]);
+
+}
+```
+
+En résumé, on récupère l'id de l'objet dans l'URL puis on lance la requête avec la méthode `readOne()`. Si nous avons trouvé un produit, on met le infos dans un tableau et on renvoie en json.
+
+Si pas d'éléments trouvés, on avertis l'utilisateur.
+
+Il nous manque la méthode `readOne()` dans `product.php`
+
+```php
+<?php
+...
+public function readOne() {
+  // requête pour lire 1 enregistrement
+  $query = "SELECT
+      c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created
+      FROM
+         " . $this->table_name . " p
+      LEFT JOIN
+         categories c
+      ON p.category_id = c.id
+      WHERE
+         p.id = ?
+      LIMIT
+         0,1";
+  // on prépare la requête
+  $stmt = $this->conn->prepare($query);
+  // on met l'id à sa place
+  $stmt->bindParam(1, $this->id);
+  // on execute
+  $stmt->execute();
+  // on récupère le résultat
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  // on renvoie ça dans l'objet
+  $this->name = $row['name'];
+  $this->price = $row['price'];
+  $this->description = $row['description'];
+  $this->category_id = $row['category_id'];
+  $this->category_name = $row['category_name'];
+    }
+```
+
+Voilà...On définie la requête préparée de recherche. On injecte l'id recherchée. On lance et on récupère les données dans l'objet.
+
+Testez avec l'URL `http://localhost/api/product/read_one.php?id=60` par exemple dans **insomnia** ou **postman**.
+
+<!-- ## L'UPDATE (Partie 5)
+
+...
+
+## Le DELETE (Partie 5)
+
+...
+
+## Le SEARCH (Partie 6)
+
+...
+
+## Une pagination (Partie 7)
+
+...
+
+## Lecture des catégories (Partie 8)
+
+... -->
+
+Ce cours n'est pas terminé. Revennez régulièrement pour la suite du CRUD.
