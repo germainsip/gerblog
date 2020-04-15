@@ -534,11 +534,111 @@ Voilà...On définie la requête préparée de recherche. On injecte l'id recher
 
 Testez avec l'URL `http://localhost/api/product/read_one.php?id=60` par exemple dans **insomnia** ou **postman**.
 
-<!-- ## L'UPDATE (Partie 5)
+## L'UPDATE (Partie 5)
 
+On a fait **CR**, faisons le **U** du Update.
+
+On ajoute donc `update.php` à notre dossier `product`
+
+``` php
+<?php
+
+// les headers
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods:POST");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type,Access-Control-Allow-Headers,Authorization,X-Requested-Width");
+
+include_once '../config/database.php';
+include_once '../objects/product.php';
+
+$database = new Database();
+$db = $database->getConnection();
+
+$product = new Product($db);
+
+// on récupère les données du post
+$data = json_decode(file_get_contents("php://input"));
+if ($data != null) {
+    $product->id = $data->id;
+    $product->name = $data->name;
+    $product->price = $data->price;
+    $product->description = $data->description;
+    $product->category_id = $data->category_id;
+
+    if ($product->update()) {
+        http_response_code(200);
+
+        echo json_encode(["message" => "Produit mis à jour"]);
+    } else {
+        http_response_code(503);
+
+        echo json_encode(["message" => "Le produit n'a pas été mis à jour."]);
+    }
+} else {
+    http_response_code(503);
+
+    echo json_encode(["message" => "Nous n'avons pas compris votre demande"]);
+}
+```
+
+C'est sensiblement le même code que pour le Create.
+
+On ajoute la méthode `update()` à notre `product.php`
+
+```php
+<?php
 ...
+public function update() {
+        $query ="UPDATE
+                " . $this->table_name . "
+            SET
+                name = :name,
+                price = :price,
+                description = :description,
+                category_id = :category_id
+            WHERE
+                id = :id";
 
-## Le DELETE (Partie 5)
+        $stmt = $this->conn->prepare($query);
+
+        $this->name= htmlspecialchars(strip_tags($this->name));
+        $this->price= htmlspecialchars(strip_tags($this->price));
+        $this->description= htmlspecialchars(strip_tags($this->description));
+        $this->category_id= htmlspecialchars(strip_tags($this->category_id));
+        $this->id= htmlspecialchars(strip_tags($this->id));
+
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':price', $this->price);
+        $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':category_id', $this->category_id);
+        $stmt->bindParam(':id', $this->id);
+
+        if($stmt->execute()){
+            return true;
+        }
+
+        return false;
+    }
+```
+
+Testez (comme d'habitude) avec votre client à l'adresse `http://localhost/api/product/update.php` et ajoutez le json suivant dans le body:
+
+```json
+{
+    "id": "66",
+    "name": "Mega oreiller 2.0",
+    "description": "Le meilleur oreiller pour des programmeurs incroyables.",
+    "price": "300",
+    "category_id": "2",
+    "category_name": "Electronics"
+  }
+```
+
+J'ai juste changé le prix !!!
+
+<!-- ## Le DELETE (Partie 5)
 
 ...
 
