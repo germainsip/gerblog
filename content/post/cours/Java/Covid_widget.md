@@ -258,3 +258,42 @@ scene.setOnMouseDragged(event -> {
 Testez, ça bouge...
 
 ![widget gif](/img/JavaFX_Json/widget1.gif)
+
+Réglons maintenant le problème de fermeture de l'appli.
+
+- On ajoute un menu contextuel à ma fenêtre dans le controlleur.
+- On ajoute l'interface `Initializable` à notre controlleur et dans la méthode `initialize()` et on lance le menu.
+
+```java
+public class WidgetController implements Initializable {
+   // N'oubliez pas de nommer l'AnchorPane qui sert d'ancre à notre menu
+    @FXML
+    public AnchorPane rootPane;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initializeContextMenu();
+    }
+
+   private void initializeContextMenu() {
+   // le bouton quitter et son action
+       MenuItem exitItem = new MenuItem("Quitter");
+       exitItem.setOnAction(event -> {
+           System.exit(0);
+       });
+   // le menu qui s'active au clique droit et se cache au clique gauche
+       final ContextMenu contextMenu = new ContextMenu(exitItem);
+       rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+           if(event.isSecondaryButtonDown()){
+               contextMenu.show(rootPane,event.getScreenX(),event.getScreenY());
+           } else {
+            if (contextMenu.isShowing()){
+                contextMenu.hide();
+            }
+        }
+    });
+    }
+}
+```
+
+Maintenant vous avez la possibilité de quitter l'appli.
