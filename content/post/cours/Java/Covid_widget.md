@@ -187,3 +187,74 @@ En haut de `widget.fxml` on déclare l'emplacement du fichier de style et on va 
 Si tout est bien en place chez vous, après compilation et lancement on devrait obtenir ça:
 
 ![wiget1](/img/JavaFX_Json/widget1.png)
+
+## Rendre la fenêtre sans bordure et draggable
+
+On va d'abord transformer l'affichage pour avoir une fenêtre un peu transparente et sans bordure.
+
+Je vais ajouter une autre scene, un peu comme un conteneur qui sera utilisé plus tard. Ensuite, je vais définir la transparence et cacher la bordure.
+
+
+```java
+//Le primaryStage devient le conteneur
+primaryStage.initStyle(StageStyle.UTILITY);
+//On le rend transparent
+primaryStage.setOpacity(0);
+primaryStage.show();
+
+//On défini un nouveau stage
+Stage secondaryStage = new Stage();
+//On enlève les bordures
+secondaryStage.initStyle(StageStyle.UNDECORATED);
+//On l'attache à primaryStage
+secondaryStage.initOwner(primaryStage);
+Parent root = FXMLLoader.load(App.class.getResource("widget.fxml"));
+Scene scene = new Scene(root);
+//On règle la transparence à 0.8
+secondaryStage.setOpacity(0.8);
+secondaryStage.setScene(scene);
+secondaryStage.show();
+```
+
+Vous devriez avoir maintenant une fenêtre au centre de l'écran.
+Par contre, nous avons 2 problèmes... On ne peut plus la déplacer et on ne peut plus la fermer non plus.
+
+On met la fenêtre en haut à droite en ajoutant ça
+
+```java
+// Aligner la fenêtre en haut à droite
+//on repère les limites de l'écran
+Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+// on change les coordonnées de la fenêtre
+secondaryStage.setX(visualBounds.getMaxX() - 25 - scene.getWidth());
+secondaryStage.setY(visualBounds.getMinY() + 25);
+```
+
+Pour faire glisser la fenêtre on va définir le décalage avec:
+
+
+```java
+private double xOffset;
+private double yOffset;
+```
+
+en haut de la classe et ajouter l'évenement dans la méthode start:
+
+
+```java
+//On fait glisser la fenêtre avec la souris
+//On récupère les offsets
+scene.setOnMousePressed(event -> {
+    xOffset = secondaryStage.getX() - event.getScreenX();
+    yOffset = secondaryStage.getY() - event.getScreenY();
+});
+//On fait bouger la fenêtre
+scene.setOnMouseDragged(event -> {
+    secondaryStage.setX(event.getScreenX() + xOffset);
+    secondaryStage.setY(event.getScreenY() + yOffset);
+});
+```
+
+Testez, ça bouge...
+
+![widget gif](/img/JavaFX_Json/widget1.gif)
