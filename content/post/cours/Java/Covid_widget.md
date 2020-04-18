@@ -1,7 +1,7 @@
 ---
 title: Covid_widget
 date: 2020-04-16T08:10:03.000Z
-draft: false
+draft: true
 description: 'Tuto du moment, un widget pour les stats du covid-19'
 categories:
   - JavaFX
@@ -297,3 +297,25 @@ public class WidgetController implements Initializable {
 ```
 
 Maintenant vous avez la possibilité de quitter l'appli.
+
+## On attaque l'api
+
+Tout d'abord, je vais utiliser [retrofit2](https://square.github.io/retrofit/)
+
+C'est une librairie qui va nous permettre de gérer efficacement la consommation d'api en json.
+
+Vous devez l'**inclure** dans vos dépendances:
+
+```xml
+<dependency>
+  <groupId>com.squareup.retrofit2</groupId>
+  <artifactId>retrofit</artifactId>
+  <version>(insert latest version)</version>
+</dependency>
+```
+
+Pour aller plus vite nous allons utiliser un outils en ligne (on peu l'installer en local via homebrew également). Cet outil va nous générer le **POJO** à partir du json.
+
+POJO, c'est quoi? C'est l'objet qui va correspondre à la représentation json mais en Java cette fois.
+
+Créons notre classe
