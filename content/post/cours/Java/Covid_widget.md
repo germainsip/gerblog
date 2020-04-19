@@ -1,13 +1,14 @@
 ---
 title: Covid_widget
 date: 2020-04-16T08:10:03.000Z
-draft: true
+draft: false
 description: 'Tuto du moment, un widget pour les stats du covid-19'
 categories:
   - JavaFX
   - Persistance
 tags:
   - JavaFX
+  - Gradle
   - Json
   - Gson
   - Retrofit
@@ -47,27 +48,73 @@ Entrez https://coronavirus-19-api.herokuapp.com/countries/france dans insomnia e
 }
 ```
 
-## Je vais commencer par l'aspect graphique du widget
+## Commençons par notre projet JavaFX
 
-- Créez un nouveau projet Maven javaFX
-- Vous allez supprimer les fichiers du modèle et suivez le schema suivant:
+Créez un projet Gradle et modifiez le fichier `build.gradle` comme ceci
+
+```gradle
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+group 'org.gerblog'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+}
+javafx {
+    version = "14"
+    modules = ['javafx.controls','javafx.base','javafx.graphics','javafx.fxml']
+}
+```
+
+Ce sera grâce aux plugins `application` et `org.openjfx.javafxplugin` qui vont nous permettre de faire du javafx ainsi que la déclaration des modules nécessaires au fonctionnement de javaFX.
+
+Créez un package dans le dossier java et créez y une classe `Launch.java`:
+
 
 ```zsh
-.
-├── java
-│   └── org
-│       └── gerblog
-│           ├── gui
-│           │   ├── widget
-│           │   │   └── WidgetController.java
-│           │   └── Launch.java
-│           └── App.java
-└── resources
+java
+└── main
     └── org
         └── gerblog
-            ├── main_style.css
-            └── widget.fxml
+            └── Launch.class
 ```
+
+Comme nous savons le faire, créons une simple fenêtre pour tester que notre application fonctionne.
+
+```java
+public class Launch extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root;
+        Scene scene = new Scene(new StackPane(new Label("JavaFX")),200,200);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+}
+```
+
+Et enfin il faut déclarer la classe principal dans le `build.gradle` en ajoutant `mainClassName = 'org.gerblog.Launch'`
+
+A droite dans IntelliJ dans le menu gradle dans Tasks/Application double cliquez sur run.
+
+## Utilisons Retrofit
+
+
+<!--## Maintenant, l'aspect graphique du widget
+
+- Créez un nouveau projet Gradle javaFX (Je ferai un tuto sur cette technique)
+- Créez votre package principal
 
 La classe `App.java` va servir à duper la JVM pour faire fonctionner JavaFX.
 
@@ -318,4 +365,6 @@ Pour aller plus vite nous allons utiliser un outils en ligne (on peu l'installer
 
 POJO, c'est quoi? C'est l'objet qui va correspondre à la représentation json mais en Java cette fois.
 
-Créons notre classe
+Créons notre classe -->
+
+
