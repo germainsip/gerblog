@@ -97,7 +97,7 @@ public class Launch extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root;
-        Scene scene = new Scene(new StackPane(new Label("JavaFX")),200,200);
+        Scene scene = new Scene(new StackPane(new Label("gradle et JavaFX")),200,200);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -109,6 +109,86 @@ Et enfin il faut déclarer la classe principal dans le `build.gradle` en ajoutan
 A droite dans IntelliJ dans le menu gradle dans Tasks/Application double cliquez sur run.
 
 ## Utilisons Retrofit
+
+**Retrofit** est une librairie qui va nous permettre de récupérer les données de l'api simplement.
+
+**Retrofit** gère les appel https et un adapter qui va traduire le Json en objets java (POJO).
+
+On commence donc par importer **Retrofit** dans notre projet. Ajoutez ces 2 lignes dans `build.gradle`
+
+```gradle
+dependencies {
+    //...les autres dépendances
+
+    compile 'com.squareup.retrofit2:retrofit:2.8.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.8.1'
+}
+```
+
+Pour faire fonctionner **Retrofit** nous devons mettre en place le service de consommation de l'api. Créez un package `datafetch` et dans celui ci créez une classe `DataProviderService.java`
+
+```java
+public class DataProviderService {
+    public void getData(String countryName){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://coronavirus-19-api.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+```
+La méthode getData() va nous permettre de récupérer les données.
+Le builder de **Retrofit** utilise l'adresse de base de l'api. Et on lui ajout le convertisseur Gson.
+
+Retrofit a besoin aussi d'une interfaces de connexion
+
+Créez l'interface CovidApi.java
+
+```java
+public interface CovidApi {
+    // la requête get pour avoir toutes les infos
+    @GET("https://coronavirus-19-api.herokuapp.com/all")
+    Call<JsonObject> getGlobalData();
+    //La requête pour avoir uniquement le pays qui nous intéresse
+    @GET("https://coronavirus-19-api.herokuapp.com/countries/{countryName}")
+    Call<JsonObject> getCountryData(@Path(value="countryName") String countryName);
+}
+```
+
+Retournons dans le service et faisons appel à l'interface pour créer l'objet de connexion
+
+
+```java
+...
+
+CovidApi covidApi = retrofit.create(CovidApi.class);
+
+        covidApi.getGlobalData()
+        .enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+```
+
+On a plus qu'a tester ça.
+
+Dans `Launch.java` ajoutez un appel à notre `getData()` dans la méthode `start()`
+
+```java
+...
+new DataProviderService().getData("France");
+...
+```
+
+Vous devriez avoir en consol les chiffres du jour.
+
 
 
 <!--## Maintenant, l'aspect graphique du widget
