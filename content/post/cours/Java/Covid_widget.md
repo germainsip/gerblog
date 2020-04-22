@@ -50,7 +50,7 @@ Entrez https://coronavirus-19-api.herokuapp.com/countries/france dans insomnia e
 
 ## Commençons par notre projet JavaFX
 
-{{< youtube Z-36q571Nz8>}}
+{{< youtube Z-36q571Nz8 >}}
 
 Créez un projet Gradle et modifiez le fichier `build.gradle` comme ceci
 
