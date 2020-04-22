@@ -50,6 +50,8 @@ Entrez https://coronavirus-19-api.herokuapp.com/countries/france dans insomnia e
 
 ## Commençons par notre projet JavaFX
 
+{{< youtube Z-36q571Nz8>}}
+
 Créez un projet Gradle et modifiez le fichier `build.gradle` comme ceci
 
 ```gradle
@@ -342,6 +344,37 @@ public class CountryData {
         this.totalTests = totalTests;
     }}
 ```
+
+Ajoutez à nos deux objets un @override de toString pour que ça nous affiche ce que l'on veut et pas la méthode par défaut de java.
+
+Par exemple, voilà celle de `GlobalData.java`
+
+```java
+@Override
+    public String toString() {
+        return "GlobalData{" +
+                "cases=" + cases +
+                ", deaths=" + deaths +
+                ", recovered=" + recovered +
+                '}';
+    }
+```
+
+## Récupérons tout ça avec Retrofit
+
+Nous allons modifier les types dans l'interface `CovidApi.java` en remplaçant les JsonObject par l'objet qui correspond.
+
+```java
+public interface CovidApi {
+    @GET("https://coronavirus-19-api.herokuapp.com/all")
+    Call<GlobalData> getGlobalData();
+
+    @GET("https://coronavirus-19-api.herokuapp.com/countries/{countryName}")
+    Call<CountryData> getCountryData(@Path(value="countryName") String countryName);
+}
+```
+
+Maintenant, le convertisseur va faire le travail pour nous et convertir le Json en POJO (งツ)ว.
 
 
 
