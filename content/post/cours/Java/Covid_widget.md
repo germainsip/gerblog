@@ -80,7 +80,6 @@ Ce sera grâce aux plugins `application` et `org.openjfx.javafxplugin` qui vont 
 
 Créez un package dans le dossier java et créez y une classe `Launch.java`:
 
-
 ```zsh
 java
 └── main
@@ -135,8 +134,8 @@ public class DataProviderService {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
-
 ```
+
 La méthode getData() va nous permettre de récupérer les données.
 Le builder de **Retrofit** utilise l'adresse de base de l'api. Et on lui ajout le convertisseur Gson.
 
@@ -156,7 +155,6 @@ public interface CovidApi {
 ```
 
 Retournons dans le service et faisons appel à l'interface pour créer l'objet de connexion
-
 
 ```java
 ...
@@ -187,7 +185,164 @@ new DataProviderService().getData("France");
 ...
 ```
 
-Vous devriez avoir en consol les chiffres du jour.
+Vous devriez avoir en console les chiffres du jour.
+
+## Faisons des POJO
+
+D'abord POJO c'est Plain Old Java Object [POJO pour wikipedia](https://fr.wikipedia.org/wiki/Plain_old_Java_object)
+
+En d'autre terme on va créer la correspondance en entre le json et un objet java.
+Trop simple quand on a les bons outils. Je vous invite à utiliser une extension intelliJ (Json2Pojo), mais vous pouvez trouver d'autres outils en ligne qui marchent très bien pour convertir un objet json en objet java. (http://www.jsonschema2pojo.org ou https://codebeautify.org/json-to-java-converter ... il en existe beaucoup).
+
+Après avoir converti et nettoyé notre objet vous devriez avoir ça pour l'objet correspondant à la requête all:
+
+```java
+public class GlobalData {
+
+    private long cases;
+    private long deaths;
+    private long recovered;
+
+    public long getCases() {
+        return cases;
+    }
+
+    public void setCases(long cases) {
+        this.cases = cases;
+    }
+
+    public long getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(long deaths) {
+        this.deaths = deaths;
+    }
+
+    public long getRecovered() {
+        return recovered;
+    }
+
+    public void setRecovered(long recovered) {
+        this.recovered = recovered;
+    }}
+```
+
+et pour la recherche par ville:
+
+```java
+public class CountryData {
+
+    private String country;
+    private Long active;
+    private Long cases;
+    private Long casesPerOneMillion;
+    private Long critical;
+    private Long deaths;
+    private Long deathsPerOneMillion;
+    private Long recovered;
+    private Long testsPerOneMillion;
+    private Long todayCases;
+    private Long todayDeaths;
+    private Long totalTests;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Long getActive() {
+        return active;
+    }
+
+    public void setActive(Long active) {
+        this.active = active;
+    }
+
+    public Long getCases() {
+        return cases;
+    }
+
+    public void setCases(Long cases) {
+        this.cases = cases;
+    }
+
+    public Long getCasesPerOneMillion() {
+        return casesPerOneMillion;
+    }
+
+    public void setCasesPerOneMillion(Long casesPerOneMillion) {
+        this.casesPerOneMillion = casesPerOneMillion;
+    }
+
+    public Long getCritical() {
+        return critical;
+    }
+
+    public void setCritical(Long critical) {
+        this.critical = critical;
+    }
+
+    public Long getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(Long deaths) {
+        this.deaths = deaths;
+    }
+
+    public Long getDeathsPerOneMillion() {
+        return deathsPerOneMillion;
+    }
+
+    public void setDeathsPerOneMillion(Long deathsPerOneMillion) {
+        this.deathsPerOneMillion = deathsPerOneMillion;
+    }
+
+    public Long getRecovered() {
+        return recovered;
+    }
+
+    public void setRecovered(Long recovered) {
+        this.recovered = recovered;
+    }
+
+    public Long getTestsPerOneMillion() {
+        return testsPerOneMillion;
+    }
+
+    public void setTestsPerOneMillion(Long testsPerOneMillion) {
+        this.testsPerOneMillion = testsPerOneMillion;
+    }
+
+    public Long getTodayCases() {
+        return todayCases;
+    }
+
+    public void setTodayCases(Long todayCases) {
+        this.todayCases = todayCases;
+    }
+
+    public Long getTodayDeaths() {
+        return todayDeaths;
+    }
+
+    public void setTodayDeaths(Long todayDeaths) {
+        this.todayDeaths = todayDeaths;
+    }
+
+    public Long getTotalTests() {
+        return totalTests;
+    }
+
+    public void setTotalTests(Long totalTests) {
+        this.totalTests = totalTests;
+    }}
+```
+
 
 
 
