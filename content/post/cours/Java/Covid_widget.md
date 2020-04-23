@@ -376,6 +376,124 @@ public interface CovidApi {
 
 Maintenant, le convertisseur va faire le travail pour nous et convertir le Json en POJO (งツ)ว.
 
+Jusqu'ici la méthode getData du DataProviderService était vide, nous alons créer un objet pour réceptionner les valeurs et l'appeler `CoviDataModel`
+
+```java
+public class CovidDataModel {
+    private GlobalData globalData;
+    private CountryData countryData;
+
+    public GlobalData getGlobalData() {
+        return globalData;
+    }
+
+    public CountryData getCountryData() {
+        return countryData;
+    }
+}
+```
+
+Nous devons changer le retour de `getData` dans le Provider de void à `CovidDataModel` et pouvoir renvoyer en même temps les deux valeurs (Celà impose l'utilisation de `CompletableFuture` une méthode qui permet d'attendre que les 2 résultats soient chargés).
+
+Du coup pas mal de changements:
+
+```java
+public class DataProviderService {
+    public CovidDataModel getData(String countryName) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://coronavirus-19-api.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CovidApi covidApi = retrofit.create(CovidApi.class);
+// premier Future
+        CompletableFuture<GlobalData> callback1 = new CompletableFuture<>();
+
+        covidApi.getGlobalData()
+                .enqueue(new Callback<GlobalData>() {
+                    @Override
+                    public void onResponse(Call<GlobalData> call, Response<GlobalData> response) {
+                        callback1.complete(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<GlobalData> call, Throwable t) {
+                        callback1.completeExceptionally(t);
+                    }
+                });
+                // Deuxième Future
+        CompletableFuture<CountryData> callback2 = new CompletableFuture<>();
+
+        covidApi.getCountryData(countryName)
+                .enqueue(new Callback<CountryData>() {
+                    @Override
+                    public void onResponse(Call<CountryData> call, Response<CountryData> response) {
+                        callback2.complete(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<CountryData> call, Throwable t) {
+                        callback2.completeExceptionally(t);
+                    }
+                });
+// L'obtention des Futures
+        GlobalData globalData = callback1.join();
+        CountryData countryData = callback2.join();
+// retour du model
+        return new CovidDataModel(globalData,countryData);
+    }
+}
+```
+
+Pour le model on lui ajoute un constructeur et une méthode toString
+
+```java
+public class CovidDataModel {
+    private GlobalData globalData;
+    private CountryData countryData;
+
+    @Override
+    public String toString() {
+        return "CovidDataModel{" +
+                "globalData=" + globalData +
+                ", countryData=" + countryData +
+                '}';
+    }
+
+    public CovidDataModel(GlobalData globalData, CountryData countryData) {
+        this.globalData = globalData;
+        this.countryData = countryData;
+    }
+
+    public GlobalData getGlobalData() {
+        return globalData;
+    }
+
+    public CountryData getCountryData() {
+        return countryData;
+    }
+}
+```
+
+et le launch...
+
+```java
+...
+CovidDataModel dataModel = new DataProviderService().getData("France");
+System.out.println(dataModel);
+...
+```
+
+Maintenant si vous exécutez l'appli, elle va chercher les info sur l'api et construit un objet prenant les infos dont nous allons nous servir.
+
+> Le résultat que vous devriez avoir en console
+
+```zsh
+CovidDataModel{globalData=GlobalData{cases=2661504, deaths=185504, recovered=730727}, countryData=CountryData{country='France', active=97880, cases=159877, casesPerOneMillion=2449, critical=5218, deaths=21340, deathsPerOneMillion=327, recovered=40657, testsPerOneMillion=7103, todayCases=0, todayDeaths=0, totalTests=463662}}
+```
+
+## Un peu de design maintenant
+
+On a écrit beaucoup de code. Amusons nous avec l'apsect graphique du widget.
 
 
 
