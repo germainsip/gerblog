@@ -495,6 +495,104 @@ CovidDataModel{globalData=GlobalData{cases=2661504, deaths=185504, recovered=730
 
 On a écrit beaucoup de code. Amusons nous avec l'apsect graphique du widget.
 
+Créons un package `gui/widget`. A l'intérieur, créez un fxml `widget.fxml` et son controlleur `Widgetcontroller.java`
+
+Voilà le contenu du fxml
+
+```xml
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gerblog.gui.widget.WidgetController">
+   <children>
+      <VBox AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label text="Infos sur le Covid" />
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <FontIcon iconLiteral="fa-globe" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cas: ... | Guéris: ... | Morts: ..." />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="27.0" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="FR" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cas: ... | Guéris: ... | Morts: ..." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
+```
+
+Si vous copiez directement ce code, ça va pas marcher!!!
+
+Si vous lisez le contenu, vous vous apercevez que j'ai ajouté des choses nouvelles. D'abord, il y a le `FontIcon`.
+
+Il faut ajouter une dépendace à notre projet dans `build.gradle`:
+
+```gradle
+  compile 'org.kordamp.ikonli:ikonli-javafx:11.4.0'
+    compile 'org.kordamp.ikonli:ikonli-fontawesome-pack:11.4.0'
+```
+
+Cela nous permet d'utiliser les fontawesome qui produisent de icones (et ça c'est trop cool...).
+
+## Un peu de CSS
+
+C'est un peu compliqué de détailler cette partie ici. Je le fais dans la vidéo.
+
+Vous allez ajouter un package `style` et un fichier `main_style.css` dont le contenu sera
+
+```css
+* {
+    -fx-base: #232323;
+    -fx-font-family: "Hack Nerd Font", "Noto Mono", Arial;
+}
+
+.main-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 20pt;
+}
+
+.country-title {
+    -fx-font-size: 16pt;
+    -fx-fill: white;
+}
+
+.content-text {
+    -fx-font-size: 14pt;
+    -fx-fill: white;
+}
+```
+
+après avoir affecté les classes et fait quelques changements le fxml devient
+
+```xml
+<AnchorPane stylesheets="@../style/main_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gerblog.gui.widget.WidgetController">
+   <children>
+      <VBox AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label styleClass="main-title" text="Infos sur le Covid" />
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <FontIcon iconColor="WHITE" iconLiteral="fa-globe" iconSize="30" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="content-text" text="Cas: ... | Guéris: ... | Morts: ..." />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="27.0" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="country-title" text="FR" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="content-text" text="Cas: ... | Guéris: ... | Morts: ..." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
+```
+
+Et visuellement vous devez obtenir
+
+![apercu](/img/apercu-widget.png)
 
 
 <!--## Maintenant, l'aspect graphique du widget
