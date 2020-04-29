@@ -111,6 +111,10 @@ A droite dans IntelliJ dans le menu gradle dans Tasks/Application double cliquez
 
 ## Utilisons Retrofit
 
+
+{{<youtube Q0ltx0oAFd8>}}
+
+
 **Retrofit** est une librairie qui va nous permettre de récupérer les données de l'api simplement.
 
 **Retrofit** gère les appel https et un adapter qui va traduire le Json en objets java (POJO).
@@ -190,6 +194,9 @@ new DataProviderService().getData("France");
 Vous devriez avoir en console les chiffres du jour.
 
 ## Faisons des POJO
+
+
+{{<youtube Q0ltx0oAFd8>}}
 
 D'abord POJO c'est Plain Old Java Object [POJO pour wikipedia](https://fr.wikipedia.org/wiki/Plain_old_Java_object)
 
