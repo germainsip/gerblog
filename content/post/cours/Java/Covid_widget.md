@@ -404,6 +404,9 @@ Nous devons changer le retour de `getData` dans le Provider de void à `CovidDat
 
 Du coup pas mal de changements:
 
+{{<youtube XbIl5VG1CGw>}}
+
+
 ```java
 public class DataProviderService {
     public CovidDataModel getData(String countryName) {
