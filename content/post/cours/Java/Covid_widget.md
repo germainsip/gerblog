@@ -567,21 +567,20 @@ Vous allez ajouter un package `style` et un fichier `main_style.css` dont le con
 après avoir affecté les classes et fait quelques changements le fxml devient
 
 ```xml
-<AnchorPane stylesheets="@../style/main_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gerblog.gui.widget.WidgetController">
+<AnchorPane stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gerblog.gui.widget.WidgetController">
    <children>
       <VBox AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
-            <Label styleClass="main-title" text="Infos sur le Covid" />
-            <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label styleClass="main-title" text="Les Chiffres du Covid-19" />
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
                <children>
-                  <FontIcon iconColor="WHITE" iconLiteral="fa-globe" iconSize="30" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="content-text" text="Cas: ... | Guéris: ... | Morts: ..." />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="27.0" spacing="10.0">
+                  <FontIcon iconColor="white" iconLiteral="fa-globe" iconSize="30" />
+                  <Text fx:id="textGlobalReport" styleClass="content-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Cas: ... | Guéris: ... | Morts : ..." />
+               </children></HBox>
+            <HBox spacing="20.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="country-title" text="FR" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="content-text" text="Cas: ... | Guéris: ... | Morts: ..." />
+                  <Text fx:id="textCountryCode" styleClass="country-title" strokeType="OUTSIDE" strokeWidth="0.0" text="FR" />
+                  <Text fx:id="textCountryReport" styleClass="content-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Cas: ... | Guéris: ... | Morts: ..." />
                </children>
             </HBox>
          </children>
@@ -594,7 +593,8 @@ Et visuellement vous devez obtenir
 
 ![apercu](/img/apercu-widget.png)
 
-
+> J'en ai profité pour nommer les éléments dont nous aurons besoin.
+>
 <!--## Maintenant, l'aspect graphique du widget
 
 - Créez un nouveau projet Gradle javaFX (Je ferai un tuto sur cette technique)
