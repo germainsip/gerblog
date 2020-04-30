@@ -503,7 +503,7 @@ CovidDataModel{globalData=GlobalData{cases=2661504, deaths=185504, recovered=730
 
 ## Un peu de design maintenant
 
-{{<youtube >}}
+{{<youtube yPSg1ylDpQs>}}
 
 On a écrit beaucoup de code. Amusons nous avec l'apsect graphique du widget.
 
