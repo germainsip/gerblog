@@ -503,6 +503,8 @@ CovidDataModel{globalData=GlobalData{cases=2661504, deaths=185504, recovered=730
 
 ## Un peu de design maintenant
 
+{{<youtube >}}
+
 On a écrit beaucoup de code. Amusons nous avec l'apsect graphique du widget.
 
 Créons un package `gui/widget`. A l'intérieur, créez un fxml `widget.fxml` et son controlleur `Widgetcontroller.java`
@@ -604,7 +606,38 @@ Et visuellement vous devez obtenir
 ![apercu](/img/apercu-widget.png)
 
 > J'en ai profité pour nommer les éléments dont nous aurons besoin.
->
+
+Il reste alors à ajouter les référeces de nos champs dans le controlleur et implémenter `Initializable`
+
+```java
+public class WidgetController implements Initializable {
+
+    @FXML
+    public AnchorPane rootPane;
+    @FXML
+    public Text textGlobalReport,textCountryCode,textCountryReport;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+}
+```
+
+Dans `Launch` on fait les modifiations pour le fxml
+
+```java
+Parent root = FXMLLoader.load(getClass().getResource("/org/gerblog/gui/widget/widget.fxml"));
+Scene scene = new Scene(root);
+```
+
+Et pour que gradle ait accés au css et fxml on ajoute ces 2 lignes à build.gradle
+
+```gradle
+sourceSets.main.resources.srcDirs("src/main/java").includes.addAll(["**/*.fxml", "**/*.css"])
+sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
+```
+
 <!--## Maintenant, l'aspect graphique du widget
 
 - Créez un nouveau projet Gradle javaFX (Je ferai un tuto sur cette technique)
