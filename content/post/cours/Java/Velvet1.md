@@ -1,20 +1,54 @@
 ---
-title: "Velvet1"
-date: 2020-05-04T13:58:26+02:00
-draft: true
-description: 'Exemple d'utilisation de javafx avec le CSS'
+title: Velvet1
+date: 2020-05-04T12:24:26.000Z
+draft: false
+description: Exemple d'utilisation du CSS avec javaFX
 categories:
   - JavaFX
-  - CSS
+  - Persistance
 tags:
   - JavaFX
   - Gradle
-  - CSS
 thumbnail: img/css.png
-lead: 'Tuto du moment, un widget pour les stats du covid-19'
+lead: Exemple d'utilisation du CSS avec javaFX
 comments: false
 authorbox: true
 toc: true
 mathjax: true
 ---
 
+## Construction du squelette de l'appli
+
+Commencez par créer un projet JavaFX avec Gradle.
+
+{{<youtube OVz0EJK-TKU>}}
+
+Ajoutez les plugins au build.gradle
+
+```gradle
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+```
+
+on définie les modules de javaFX la classe main
+
+```gradle
+javafx {
+    version = "14"
+    modules = ["javafx.controls","javafx.base","javafx.graphics","javafx.fxml"]
+}
+
+mainClassName = 'org.germain.App'
+```
+
+Créez les packages ainsi que `App.java`, `velvet.fxml` et `VelvetController.java` comme dans la vidéo.
+
+Enfin, apportez les modification à build.gradle pour que gradle prenne en charge le fxml.
+
+```gradle
+sourceSets.main.resources.srcDirs("src/main/java").includes.addAll(["**/*.fxml", "**/*.css","**/*.png"])
+sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
+```
