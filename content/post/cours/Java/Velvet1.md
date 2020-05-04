@@ -52,3 +52,11 @@ Enfin, apportez les modification à build.gradle pour que gradle prenne en charg
 sourceSets.main.resources.srcDirs("src/main/java").includes.addAll(["**/*.fxml", "**/*.css","**/*.png"])
 sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
 ```
+
+## Une mini mise en page et un objet.
+
+On va créer la base graphique de l'application:
+
+{{<youtube Gh_RNr9TjSo>}}
+
+Vous aurez besoin de l'image suivante: [disque](/download/disque.png) pour le vinyle et la pochette de [Dirt](/download/Dirt.jpeg)
