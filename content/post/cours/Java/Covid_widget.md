@@ -640,7 +640,7 @@ sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*
 
 ## On widgetise la fenêtre
 
-{{youtube G_D42piHSR8}}
+{{<youtube G_D42piHSR8>}}
 
 Pour enlever la bordure, il suffit d'ajouter un réglage au `primaryStage`
 
