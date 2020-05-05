@@ -640,6 +640,8 @@ sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*
 
 ## On widgetise la fenêtre
 
+{{youtube G_D42piHSR8}}
+
 Pour enlever la bordure, il suffit d'ajouter un réglage au `primaryStage`
 
 ```java
@@ -700,6 +702,8 @@ private double yOffset;
 ```
 
 ## Retour au controlleur pour récupérer les données
+
+{{<youtube 26-42PlpTlg>}}
 
 Nous allons utiliser un planificateur (Scheduler).
 
