@@ -656,6 +656,7 @@ public void start(Stage primaryStage) throws Exception {
     // le stage fantome
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setOpacity(0);
+        primaryStage.show();
     // le stage sans bordure contenu dans le premier
         Stage secondaryStage = new Stage();
         secondaryStage.initStyle(StageStyle.UNDECORATED);
@@ -689,12 +690,12 @@ private double yOffset;
 
 //ajout de la méthode de translation
  scene.setOnMousePressed(event -> {
-            xOffset = secondaryStage.getX() - event.getSceneX();
-            yOffset = secondaryStage.getY() - event.getSceneY();
+            xOffset = secondaryStage.getX() - event.getScreneX();
+            yOffset = secondaryStage.getY() - event.getScreneY();
         });
         scene.setOnMouseDragged(event -> {
-            secondaryStage.setX(event.getSceneX() + xOffset);
-            secondaryStage.setY(event.getSceneY() + yOffset);
+            secondaryStage.setX(event.getScreneX() + xOffset);
+            secondaryStage.setY(event.getScreneY() + yOffset);
         });
 ```
 
