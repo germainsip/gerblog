@@ -53,10 +53,11 @@ sourceSets.main.resources.srcDirs("src/main/java").includes.addAll(["**/*.fxml",
 sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
 ```
 
-## Une mini mise en page et un objet.
+## Une mini mise en page et un objet
 
 On va créer la base graphique de l'application:
 
 {{<youtube Gh_RNr9TjSo>}}
 
 Vous aurez besoin de l'image suivante: [disque](/download/disque.png) pour le vinyle et la pochette de [Dirt](/download/Dirt.jpeg)
+

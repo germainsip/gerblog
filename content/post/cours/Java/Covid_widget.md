@@ -638,6 +638,66 @@ sourceSets.main.resources.srcDirs("src/main/java").includes.addAll(["**/*.fxml",
 sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
 ```
 
+## On widgetise la fenêtre
+
+Pour enlever la bordure, il suffit d'ajouter un réglage au `primaryStage`
+
+```java
+primaryStage.initStyle(StageStyle.UNDECORATED);
+```
+
+Testez... La fenêtre n'a plus de bordure mais elle apparait toujours dans la barre des taches.
+
+La technique pour faire disparaitre tout ça on va ajouter un `stage` supplémentaire
+
+
+```java
+public void start(Stage primaryStage) throws Exception {
+    // le stage fantome
+        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.setOpacity(0);
+    // le stage sans bordure contenu dans le premier
+        Stage secondaryStage = new Stage();
+        secondaryStage.initStyle(StageStyle.UNDECORATED);
+        secondaryStage.initOwner(primaryStage);
+    // On reprend le même code que précédemment en changeant juste le nom du stage
+        Parent root = FXMLLoader.load(getClass().getResource("/org/gerblog/gui/widget/widget.fxml"));
+        Scene scene = new Scene(root);
+        secondaryStage.setScene(scene);
+        secondaryStage.show();
+    }
+```
+
+Affichons le en haut à droite en ajoutant ce code (que je détail dans la vidéo):
+
+```java
+//on aligne en haut à droite
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        secondaryStage.setX(visualBounds.getMaxX() - 25 - scene.getWidth());
+        secondaryStage.setY(visualBounds.getMinY() + 25);
+```
+
+Comme vous l'avez peut être remarqué, la fenêtre n'est plus draggable. On corrige ça:
+Le drag s'effectue en 2 étapes. On clique, puis on drag. Il faut donc récupérer la position initiale et ensuite faire un translation
+
+```java
+//déclaration position de départ
+private double xOffset;
+private double yOffset;
+
+...
+
+//ajout de la méthode de translation
+ scene.setOnMousePressed(event -> {
+            xOffset = secondaryStage.getX() - event.getSceneX();
+            yOffset = secondaryStage.getY() - event.getSceneY();
+        });
+        scene.setOnMouseDragged(event -> {
+            secondaryStage.setX(event.getSceneX() + xOffset);
+            secondaryStage.setY(event.getSceneY() + yOffset);
+        });
+```
+
 <!--## Maintenant, l'aspect graphique du widget
 
 - Créez un nouveau projet Gradle javaFX (Je ferai un tuto sur cette technique)
