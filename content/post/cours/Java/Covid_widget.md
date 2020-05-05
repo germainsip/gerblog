@@ -699,6 +699,68 @@ private double yOffset;
         });
 ```
 
+## Retour au controlleur pour récupérer les données
+
+Nous allons utiliser un planificateur (Scheduler).
+
+En haut du controlleur définissons notre planificateur
+
+```java
+private ScheduledExecutorService executorService;
+```
+
+Dans initialize appelons la méthode d'initialisation
+
+```java
+initializeSchedulerService();
+```
+
+et définissons cette méthode (et quelques ajustements...)
+
+```java
+private void initializeSchedulerService() {
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(this::loadData, 0,20, TimeUnit.SECONDS);
+    }
+
+private void loadData() {
+        DataProviderService dataProviderService = new DataProviderService();
+        CovidDataModel covidDataModel = dataProviderService.getData("France");
+        // attention au processus de javaFX
+        Platform.runLater(()->{
+            // déploiement des données dans l'affichage
+            inflateData(covidDataModel);
+        });
+
+    }
+
+    private void inflateData(CovidDataModel covidDataModel){
+        GlobalData globalData = covidDataModel.getGlobalData();
+        CountryData countryData = covidDataModel.getCountryData();
+        textGlobalReport.setText(getFormatedData(globalData.getCases(),globalData.getRecovered(),globalData.getDeaths()));
+        textCountryReport.setText(getFormatedData(countryData.getCases(),countryData.getRecovered(),countryData.getDeaths()));
+        // redimentionnement du stage
+        readjustStage(textCountryCode.getScene().getWindow());
+    }
+
+
+    // formatage du texte
+    private String getFormatedData(long totalCases, long recoveredCases, long totalDeath){
+        return String.format("Cas: %-8d | Guéris: %-7d | Morts: %-6d",totalCases,recoveredCases,totalDeath);
+    }
+
+    // redimentionnement du stage
+    private void readjustStage(Window stage){
+        stage.sizeToScene();
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX(visualBounds.getMaxX() - 25 - textCountryCode.getScene().getWidth());
+        stage.setY(visualBounds.getMinY() + 25);
+    }
+```
+
+> plus de détails dans la vidéo
+
+
 <!--## Maintenant, l'aspect graphique du widget
 
 - Créez un nouveau projet Gradle javaFX (Je ferai un tuto sur cette technique)
