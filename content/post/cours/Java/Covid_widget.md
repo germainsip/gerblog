@@ -766,7 +766,8 @@ private void loadData() {
 
 ## Un fichier de configuration.
 
-{{<youtube >}}
+{{<youtube 0KQx-x7Z9sU>}}
+
 
 Jusqu'ici tout est codé en dure dans notre programme. L'idée est de permettre de changer le pays et l'intervale de temps pour le rafraississement.
 
