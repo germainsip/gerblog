@@ -859,6 +859,9 @@ Et voilà ...
 
 ## Derniers petits ajouts
 
+{{<youtube 4w6NVuJWiVM>}}
+
+
 On va ajouter un menu pour quitter et rafraichir manuellement
 
 Ajoutez la méthode suivante au controlleur
