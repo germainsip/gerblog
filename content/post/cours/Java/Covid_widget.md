@@ -764,261 +764,94 @@ private void loadData() {
 
 > plus de détails dans la vidéo
 
+## Un fichier de configuration.
 
-<!--## Maintenant, l'aspect graphique du widget
+{{<youtube >}}
 
-- Créez un nouveau projet Gradle javaFX (Je ferai un tuto sur cette technique)
-- Créez votre package principal
+Jusqu'ici tout est codé en dure dans notre programme. L'idée est de permettre de changer le pays et l'intervale de temps pour le rafraississement.
 
-La classe `App.java` va servir à duper la JVM pour faire fonctionner JavaFX.
+Tout va se faire dans un fichier Json. Nousavons donc besoin d'un POJO et d'un service que nous allons mettre dans un package `config`
+
+Classe `ConfigModel.java`
 
 ```java
-public class App {
-    public static void main(String[] args) {
-        Launch.main(args);
+public class ConfigModel {
+    private int refreshIntervalInSeconds;
+    private String countryName;
+    private String countryCode;
+
+    public ConfigModel() {
+        refreshIntervalInSeconds = 30;
+        countryName = "France";
+        countryCode = "FR";
+    }
+
+    //... plus les Getter et Setter
+}
+```
+
+Classe `ConfigurationService`
+
+```java
+public class ConfigrationService {
+    private final File SETTINGS_FILE = new File("settings.json");
+    private Gson gson = new GsonBuilder().create();
+
+    public ConfigModel getConfiguration() throws IOException {
+        if(!SETTINGS_FILE.exists()){
+            createSettingsFile();
+        }
+        return getConfigurationFromfile();
+    }
+
+    private void createSettingsFile() throws IOException {
+        ConfigModel configModel = new ConfigModel();
+        try ( Writer writer = new FileWriter(SETTINGS_FILE, false)){
+            gson.toJson(configModel,writer);
+        }
+    }
+
+    private ConfigModel getConfigurationFromfile() throws IOException {
+        ConfigModel configModel = new ConfigModel();
+        try ( Reader reader = new FileReader(SETTINGS_FILE)){
+           return gson.fromJson(reader,ConfigModel.class);
+        }
     }
 }
 ```
 
-Pour le moment on va juste définir un simple affichage.
+En résumé, ce service crée le fichier de configuration s'il n'existe pas puis le lit et le transforme en objet.
+
+Enfin on va modifier le controlleur pour prendre en compte ces changements:
 
 ```java
-public class Launch extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(App.class.getResource("widget.fxml"));
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+...
+ @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            configModel = new ConfigrationService().getConfiguration();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        initializeSchedulerService();
+        textCountryCode.setText(configModel.getCountryCode());
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    private void initializeSchedulerService() {
+
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(this::loadData, 0, configModel.getRefreshIntervalInSeconds(), TimeUnit.SECONDS);
     }
-}
-```
 
-N'oubliez pas de créer le fichier `widget.fxml` dans les ressources et le controlleur associé dans `gui/widget`.
+    private void loadData() {
+        DataProviderService dataProviderService = new DataProviderService();
+        CovidDataModel covidDataModel = dataProviderService.getData(configModel.getCountryName());
+        // attention au processus de javaFX
+        Platform.runLater(() -> {
+            inflateData(covidDataModel);
+        });
 
-Pour le moment rien de fou... Mais testez le quand même.
-
-## Un peu de design
-
-On va imbriquer des VBox et des Hbox pour la mise en page
-
-```xml
-<AnchorPane stylesheets="@main_style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gerblog.gui.widget.WidgetController">
-   <children>
-      <VBox AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-         <children>
-            <Label styleClass="main-title" text="Les Chiffres du Covid-19" />
-            <HBox alignment="CENTER_LEFT" spacing="20.0">
-               <children>
-                  <FontIcon iconColor="white" iconLiteral="fa-globe" iconSize="30" />
-                  <Text fx:id="textGlobalReport" styleClass="content-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Cas: ... | Guéris: ... | Morts : ..." />
-               </children></HBox>
-            <HBox spacing="20.0">
-               <children>
-                  <Text fx:id="textCountryCode" styleClass="country-title" strokeType="OUTSIDE" strokeWidth="0.0" text="FR" />
-                  <Text fx:id="textCountryReport" styleClass="content-text" strokeType="OUTSIDE" strokeWidth="0.0" text="Cas: ... | Guéris: ... | Morts: ..." />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </children>
-</AnchorPane>
-```
-
-Si vous copiez directement ce code, ça va pas marcher!!!
-
-Si vous lisez le contenu, vous vous apercevez que j'ai ajouté des choses nouvelles. D'abord, il y a le `FontIcon`.
-
-Il faudra d'abord ajouter **ikonli** à vos dépendances dans le `pom.xml`
-
-
-```xml
-...le texte qui précède
-<dependencies>
-       ... autres dépendances
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-fontawesome-pack</artifactId>
-            <version>11.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-javafx</artifactId>
-            <version>11.4.0</version>
-        </dependency>
-        ... autres dépendances
-    </dependencies>
+    }
 ...
 ```
-
-ikonly nous permet d'ajouter des icones fontawesome (et ça c'est cool!!!).
-
-Ensuite, vous voyez aussi que j'ai ajouté des `styleClass="..."` car nous allons utiliser le CSS.
-
-En haut de `widget.fxml` on déclare l'emplacement du fichier de style et on va remplir le style dans `main-style.css`.
-
-```css
-* {
-    -fx-base: #232323;
-    -fx-font-family: 'Hack', 'Noto Mono', Arial;
-}
-
-.main-title {
-    -fx-font-weight: bold;
-    -fx-font-size: 20pt;
-}
-
-
-.content-text {
-    -fx-font-size: 14pt;
-    -fx-fill: white;
-}
-
-.country-title {
-    -fx-font-size: 16pt;
-    -fx-fill: white;
-}
-```
-
-Si tout est bien en place chez vous, après compilation et lancement on devrait obtenir ça:
-
-![wiget1](/img/JavaFX_Json/widget1.png)
-
-## Rendre la fenêtre sans bordure et draggable
-
-On va d'abord transformer l'affichage pour avoir une fenêtre un peu transparente et sans bordure.
-
-Je vais ajouter une autre scene, un peu comme un conteneur qui sera utilisé plus tard. Ensuite, je vais définir la transparence et cacher la bordure.
-
-
-```java
-//Le primaryStage devient le conteneur
-primaryStage.initStyle(StageStyle.UTILITY);
-//On le rend transparent
-primaryStage.setOpacity(0);
-primaryStage.show();
-
-//On défini un nouveau stage
-Stage secondaryStage = new Stage();
-//On enlève les bordures
-secondaryStage.initStyle(StageStyle.UNDECORATED);
-//On l'attache à primaryStage
-secondaryStage.initOwner(primaryStage);
-Parent root = FXMLLoader.load(App.class.getResource("widget.fxml"));
-Scene scene = new Scene(root);
-//On règle la transparence à 0.8
-secondaryStage.setOpacity(0.8);
-secondaryStage.setScene(scene);
-secondaryStage.show();
-```
-
-Vous devriez avoir maintenant une fenêtre au centre de l'écran.
-Par contre, nous avons 2 problèmes... On ne peut plus la déplacer et on ne peut plus la fermer non plus.
-
-On met la fenêtre en haut à droite en ajoutant ça
-
-```java
-// Aligner la fenêtre en haut à droite
-//on repère les limites de l'écran
-Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-// on change les coordonnées de la fenêtre
-secondaryStage.setX(visualBounds.getMaxX() - 25 - scene.getWidth());
-secondaryStage.setY(visualBounds.getMinY() + 25);
-```
-
-Pour faire glisser la fenêtre on va définir le décalage avec:
-
-
-```java
-private double xOffset;
-private double yOffset;
-```
-
-en haut de la classe et ajouter l'évenement dans la méthode start:
-
-
-```java
-//On fait glisser la fenêtre avec la souris
-//On récupère les offsets
-scene.setOnMousePressed(event -> {
-    xOffset = secondaryStage.getX() - event.getScreenX();
-    yOffset = secondaryStage.getY() - event.getScreenY();
-});
-//On fait bouger la fenêtre
-scene.setOnMouseDragged(event -> {
-    secondaryStage.setX(event.getScreenX() + xOffset);
-    secondaryStage.setY(event.getScreenY() + yOffset);
-});
-```
-
-Testez, ça bouge...
-
-![widget gif](/img/JavaFX_Json/widget1.gif)
-
-Réglons maintenant le problème de fermeture de l'appli.
-
-- On ajoute un menu contextuel à ma fenêtre dans le controlleur.
-- On ajoute l'interface `Initializable` à notre controlleur et dans la méthode `initialize()` et on lance le menu.
-
-```java
-public class WidgetController implements Initializable {
-   // N'oubliez pas de nommer l'AnchorPane qui sert d'ancre à notre menu
-    @FXML
-    public AnchorPane rootPane;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initializeContextMenu();
-    }
-
-   private void initializeContextMenu() {
-   // le bouton quitter et son action
-       MenuItem exitItem = new MenuItem("Quitter");
-       exitItem.setOnAction(event -> {
-           System.exit(0);
-       });
-   // le menu qui s'active au clique droit et se cache au clique gauche
-       final ContextMenu contextMenu = new ContextMenu(exitItem);
-       rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-           if(event.isSecondaryButtonDown()){
-               contextMenu.show(rootPane,event.getScreenX(),event.getScreenY());
-           } else {
-            if (contextMenu.isShowing()){
-                contextMenu.hide();
-            }
-        }
-    });
-    }
-}
-```
-
-Maintenant vous avez la possibilité de quitter l'appli.
-
-## On attaque l'api
-
-Tout d'abord, je vais utiliser [retrofit2](https://square.github.io/retrofit/)
-
-C'est une librairie qui va nous permettre de gérer efficacement la consommation d'api en json.
-
-Vous devez l'**inclure** dans vos dépendances:
-
-```xml
-<dependency>
-  <groupId>com.squareup.retrofit2</groupId>
-  <artifactId>retrofit</artifactId>
-  <version>(insert latest version)</version>
-</dependency>
-```
-
-Pour aller plus vite nous allons utiliser un outils en ligne (on peu l'installer en local via homebrew également). Cet outil va nous générer le **POJO** à partir du json.
-
-POJO, c'est quoi? C'est l'objet qui va correspondre à la représentation json mais en Java cette fois.
-
-Créons notre classe -->
-
-
+Et voilà ...
