@@ -856,3 +856,57 @@ Enfin on va modifier le controlleur pour prendre en compte ces changements:
 ...
 ```
 Et voilà ...
+
+## Derniers petits ajouts
+
+On va ajouter un menu pour quitter et rafraichir manuellement
+
+Ajoutez la méthode suivante au controlleur
+
+```java
+private void initializeContextMenu(){
+        MenuItem exitItem = new MenuItem("Quitter");
+        exitItem.setOnAction(event -> {System.exit(0);} );
+
+        final ContextMenu contextMenu = new ContextMenu(exitItem);
+    }
+```
+
+et on le fait apparaitre au clique droit sur le widget
+
+```java
+private void initializeContextMenu() {
+        MenuItem exitItem = new MenuItem("Quitter");
+        exitItem.setOnAction(event -> {
+            System.exit(0);
+        });
+        MenuItem refreshItem = new MenuItem("Rafraichir");
+        refreshItem.setOnAction(event -> {
+            executorService.schedule(this::loadData,0,TimeUnit.SECONDS);
+        });
+        final ContextMenu contextMenu = new ContextMenu(exitItem, refreshItem);
+        rootPane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (event.isSecondaryButtonDown()) {
+                contextMenu.show(rootPane, event.getScreenX(), event.getScreenY());
+            } else {
+                if (contextMenu.isShowing()) {
+                    contextMenu.hide();
+                }
+            }
+        });
+    }
+```
+
+On donne un peu de style à tout ça en ajoutant ces 2 classe au `main-style.css`
+
+```css
+.context-menu {
+    -fx-text-fill: white;
+    -fx-font-size: 12pt;
+    -fx-background-color: derive(-fx-base, 40%);
+}
+
+.menu-item:focused {
+    -fx-background-color: mediumpurple;
+}
+```
