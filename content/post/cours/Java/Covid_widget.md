@@ -913,3 +913,33 @@ On donne un peu de style à tout ça en ajoutant ces 2 classe au `main-style.css
     -fx-background-color: mediumpurple;
 }
 ```
+
+## Dernière étape, distribution
+
+Afin que notre application puisse fonctionner avec la jvm il va falloir tricher un peu.
+Déplacez le `Launch.java` dans le gui et créez une classe `App.java`
+
+{{<youtube HKFKaf6kVC8>}}
+
+```java
+package org.gerblog;
+
+import org.gerblog.gui.Launch;
+
+public class App {
+    public static void main(String[] args) {
+        Launch.main(args);
+    }
+}
+```
+
+La jvm va croire que l'on a à faire à une appli java et chargera les modules javafx ensuite.
+
+Ensuite, tout est dans la vidéo.
+
+> Pour trouver Bat to Exe converter
+> https://github.com/99fk/Bat-To-Exe-Converter-Downloader
+> ou
+> https://www.majorgeeks.com/files/details/bat_to_exe_converter.html
+> sur mac utilisez platypus
+>Pour créer l'installeur: [innosetup](https://jrsoftware.org/isinfo.php)
