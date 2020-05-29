@@ -61,3 +61,9 @@ On va créer la base graphique de l'application:
 
 Vous aurez besoin de l'image suivante: [disque](/download/disque.png) pour le vinyle et la pochette de [Dirt](/download/Dirt.jpeg)
 
+
+## Un peu plus de personnalisation
+
+En utilisant le CSS on va pouvoir aller un peu plus loin.
+
+{{<youtube uj_p0KJNE18>}}

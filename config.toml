@@ -10,6 +10,9 @@ enableEmoji = true
   bio = "Germain SIPIERE, formateur en conception et développement d'applications à l'AFPA. J'utilise différentes technologies et j'adore en découvrir continuellement de nouvelles"
   avatar = "img/moi.jpg"
 
+[markup.goldmark.renderer]
+unsafe= true
+
 [Params]
   subtitle = "Site de partage de ressources" # Subtitle of your site. Used in site header
   description = "Site personnel de Germain SIPIERE de partage de ressources" # Site description. Used in meta description
