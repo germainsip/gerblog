@@ -38,7 +38,7 @@ plugins {
 
 group 'org.afpa'
 version '1.0-SNAPSHOT'
-
+compileJava.options.encoding = 'UTF-8'
 sourceSets.main.resources.srcDir("src/main/java").includes.addAll(["**/*.fxml", "**/*.css","**/*.png"])
 sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
 
