@@ -35,6 +35,82 @@ Vous pouvez essayer de modifier le code directement dans ces fenêtres et les ex
 
 Ou si vous préférez, vous pouvez utiliser un IDE à la place, tel que WebStorm, IntelliJ avec le plug-in Dart ou Visual Studio Code avec l' extension [Dart Code ](https://marketplace.visualstudio.com/items?itemName=Dart-Code.dart-code).
 
+## La syntax de base
+
+Les types de **Dart** sont les mêmes que l'on trouve habituellement.
+
+- les entiers, doubles et numériques:
+On ve simplement déclarer le type devant le nom de la variable
+
+```dart
+int unEntier;
+double unDouble;
+// les deux sont initialisés à null
+```
+
+> Une particularité ici, tout est objet en dart et ainsi à l'initialisation l'objet est null.
+
+L'affectation se fait comme dans la majorité des langages
+
+```dart
+int unEntier;
+int unAutreEntier = 12; // à la déclaration
+
+unEntier = 24; //ou après
+```
+
+On peut également utiliser le type `num` car `int` et `double` héritent de `num`
+
+```dart
+num unEntier = 5;
+num unDouble = 326.3;
+```
+
+- Les chaines de caractères
+
+Comme dans la majorité des langages nous trouvons aussi les chaines de caractères `String` et les méthodes qui sont associées à cette classe
+
+```dart
+String maChaine = 'Salut!'; //Déclaration et initialisation
+print(maChaine); // affiche Salut!
+print(maChaine.toLowerCase()); // affiche salut!
+print(maChaine.toUpperCase()); // affiche SALUT!
+```
+
+- Les types dynamiques
+
+En Dart on peut laisser typer le compilateur quand il n'y a pas d'ambiguïté.
+
+```dart
+String premièreChaine = 'première';
+var secondeChaine = 'seconde';
+```
+
+Avec `var`le compilateur reconnaît ici que le type est `String`, néanmoins ce type ne pourra pas changer par la suite.
+Nous pouvons aussi utiliser le mot clé `dynamique` qui permet de réaffecte un autre type.
+
+```dart
+var nom = 'paul';
+dynamic age = 'douze';
+
+age = 12; //changement de type en int
+print(age);
+```
+
+- Les constantes
+Deux types de constantes existent en Dart
+- Les collections
+
+- Les alternatives
+
+- Les boucles
+
+## Les fonctions
+
+- Les paramètres optionnels [doc dart](https://dart.dev/guides/language/language-tour#optional-parameters)
+
+
+
 ## Créez une classe Dart
 
 Au-dessus de la fonction main(), ajoutez une classe `Bicycle` avec trois variables d'instance. Supprimez également le contenu de main(), comme indiqué dans l'extrait de code suivant:
@@ -109,3 +185,4 @@ Bicycle: 0 mph
 ```
 
 <!-- TODO: à compléter -->
+
