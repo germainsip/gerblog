@@ -14,6 +14,10 @@ authorbox: true
 toc: true
 mathjax: true
 ---
+## Les éléments de JavaFX
+
+Vous pouvez trouver un exemple d'utilisation d'une selection d'éléments de JavaFX sur mon dépot [ici](https://github.com/germainsip/gegeLib)
+
 ## Les `Button` et `Label`
 
 Les boutons et les labels sont les premiers élément que l'on utilise simplement dans JFX.
@@ -69,4 +73,21 @@ et notre méthode à activer. Elle va récupérer le texte du bouton et l'envoye
         //envoie du message dans le label
         res.setText(message);
     }
+```
+
+## Les Champs texte
+
+Quand on a besoin de faire des formulaires, on a besoin de champs textuels pour entrer des données. Les `TextField`sont là pour ça.
+Il en existe plusieurs:
+- Le `TextField`
+
+```xml
+<TextField fx:id="nomField" />
+```
+
+Il a d'autres attributs accessibles par SceneBuilder ou directement dans le FXML. Comme par exemple le prompt (equivalent du placeholder en html)
+
+```xml
+<TextField fx:id="prenomField" promptText="prénom" />
+
 ```
