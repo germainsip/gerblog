@@ -18,6 +18,8 @@ mathjax: true
 
 Vous pouvez trouver un exemple d'utilisation d'une selection d'éléments de JavaFX sur mon dépot [ici](https://github.com/germainsip/gegeLib)
 
+![desktop](/img/gegelib.png)
+
 ## Les `Button` et `Label`
 
 Les boutons et les labels sont les premiers élément que l'on utilise simplement dans JFX.
@@ -75,6 +77,28 @@ et notre méthode à activer. Elle va récupérer le texte du bouton et l'envoye
     }
 ```
 
+Le `ToogleButton` est un peu différent. Il admet deux états: sélectionné ou non. En Java ce sera `isSelected()`. Le Toogle est déclaré comme ceci:
+
+```xml
+               <ToggleButton fx:id="toggleBtn" mnemonicParsing="false" onAction="#toggleAction" text="ToggleButton" />
+
+```
+
+Il est donc associé à la méthode `toogleAction()` dans le contrôleur:
+
+```java
+ public void toggleAction(ActionEvent actionEvent) {
+        // à l'activation du bouton toogle on vérifie s'il est sélectionné ou non
+       if(toggleBtn.isSelected()){
+           //s'il l'est on encadre le texte en vert
+           res.setStyle("-fx-border-color: chartreuse; -fx-border-width: 5");
+       }else {
+           // sinon on rétablie le comportement par défaut
+           res.setStyle("");
+       }
+    }
+```
+
 ## Les Champs texte
 
 Quand on a besoin de faire des formulaires, on a besoin de champs textuels pour entrer des données. Les `TextField`sont là pour ça.
@@ -89,12 +113,13 @@ Il a d'autres attributs accessibles par SceneBuilder ou directement dans le FXML
 
 ```xml
 <TextField fx:id="prenomField" promptText="prénom" />
-
 ```
+<!-- à compléter -->
 
 ## Les Slider
 
 Les slider sont des curseurs dont on peut récupérer la valeur.
+<!-- à compléter -->
 
 ## Les Diagrammes et les Histogrammes
 
@@ -107,3 +132,5 @@ On peu également afficher des graphiques en JavaFX.
 - Des `BarChart` ou diagrammes en baton.
 
 ![histo](/img/histoelmt.png)
+
+<!-- à compléter -->
