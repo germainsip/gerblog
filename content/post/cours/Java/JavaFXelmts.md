@@ -91,3 +91,19 @@ Il a d'autres attributs accessibles par SceneBuilder ou directement dans le FXML
 <TextField fx:id="prenomField" promptText="prénom" />
 
 ```
+
+## Les Slider
+
+Les slider sont des curseurs dont on peut récupérer la valeur.
+
+## Les Diagrammes et les Histogrammes
+
+On peu également afficher des graphiques en JavaFX.
+
+- Des `pieChart` ou diagramme circulaire.
+
+![pie](/img/pieelmt.png)
+
+- Des `BarChart` ou diagrammes en baton.
+
+![histo](/img/histoelmt.png)
