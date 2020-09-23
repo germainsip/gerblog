@@ -181,7 +181,7 @@ Les slider sont des curseurs dont on peut récupérer la valeur.
 
 On peu également afficher des graphiques en JavaFX.
 
-- Des `pieChart` ou diagramme circulaire.
+- Des `PieChart` ou diagramme circulaire.
 
 ![pie](/img/pieelmt.png)
 
