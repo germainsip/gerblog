@@ -1,6 +1,6 @@
 ---
 title: Flutter et Dart
-date: 2020-03-24T16:29:46.000Z
+date: 2021-03-04T14:51:21+02:00
 draft: false
 categories:
   - Flutter
