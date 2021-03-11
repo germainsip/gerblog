@@ -1,7 +1,7 @@
 ---
 title: Flutter et Dart
 date: 2020-03-24T16:29:46.000Z
-draft: true
+draft: false
 categories:
   - Flutter
 tags:
@@ -74,6 +74,10 @@ class MyApp extends StatelessWidget {
 
 ![flut1](/img/flutter/flutt1.png)
 
+ou sur ios
+
+![flutt1](/img/flutter/flutt1ios.png)
+
 On utilise `MaterialApp` pour construire l'application ce qui nous permet d'utiliser la bibliothèque d'éléments pré-construits.
 
 ## Allons un peu plus loin avec des imports de bibliothèques
@@ -90,154 +94,144 @@ la première va nous donner une liste de 340000 mots français et l'autre va nou
 
 dans notre `main.dart` ajoutons un mot français au hasard.
 
-avec cette méthode:
+Créons d'abord une classe Mots qui va nous générer tout ça `Mots.dart`dans un nouveau package model:
 
 ```dart
-String genMot() {
-    var rand = new Random();// générateur de nombres aléatoires
-    var numMot = rand.nextInt(list_french_words.length);//un nombre compris entre le début et la fin de la liste
-    var mot = list_french_words[numMot];// on récupère le mot correspondant
-    mot = mot.pascalCase; // on le formate en pascalCase
-    return mot;
+import 'dart:math';
+
+import 'package:list_french_words/list_french_words.dart';
+
+class Mots {
+  final nb = list_french_words.length;
+
+  random(){
+    var rd = new Random();
+    int rdFix = rd.nextInt(nb-1);
+    return list_french_words[rdFix];
   }
+}
 ```
 
 Ajoutez cette méthode à la fin du `main.dart` (en faisant les import qui vont bien) et modifiez le texte à afficher.
 
 
 ```dart
-import 'dart:math';
+import 'package:app_one/model/Mots.dart';
 import 'package:flutter/material.dart';
-import 'package:list_french_words/list_french_words.dart';
-import 'package:recase/recase.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Salut Fluttos',
+      title: 'Salut Flutter',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Salut Les Fluttos'),
+          title: Text('Salut les Flutterinos'),
         ),
-        body:  Center(
-          child: Text(genMot()),// ici !!!
+        body: Center(
+          child: Text(
+            new Mots().random(),
+            style: TextStyle(fontSize: 24.0),
+          ),
         ),
       ),
     );
   }
-
-  String genMot() {
-    var rand = new Random();
-    var numMot = rand.nextInt(list_french_words.length);
-    var mot = list_french_words[numMot];
-    mot = mot.pascalCase;
-    return mot;
-  }
 }
+
 ```
 
-![mots](/img/flutter/mots1.png)
+![mots](/img/flutter/mots1ios.png)
 
 ## Stateless et StateFull
 
-Pour faire un peu plus propre, nous allons utiliser les **widget**. D'abord, sortons notre méthode du fichier et créons un nouveau fichier dart `Mots.dart`
-
-```dart
-import 'dart:math';
-import 'package:recase/recase.dart';
-import 'package:list_french_words/list_french_words.dart';
-
-String genMot() {
-  var rand = new Random();
-  var numMot = rand.nextInt(list_french_words.length);
-  var mot = list_french_words[numMot];
-  mot = mot.pascalCase;
-  return mot;
-}
-```
+Pour faire un peu plus propre, nous allons utiliser les **widget**.
 
 Nous allons utiliser les widget. Les widget sont statefull ou stateless. C'est à dire:
 
-- Stateless: pas d'état donc immuable lors de la vie de l'application
-- Statefull: ajoute une notion d'état qui permet de faire évoluer le widget. Le widget crée un état et qui persiste et le widget peut être supprimé et généré avec l'état.
+- **Stateless**: pas d'état donc immuable lors de la vie de l'application
+- **Statefull**: ajoute une notion d'état qui permet de faire évoluer le widget. Le widget crée un état et qui persiste et le widget peut être supprimé et généré avec l'état.
 
-A la fin du `main.dart` tapez simplement `stful` et l'IDE génère le code pour vous. Il ne reste qu'à nommer le widget (RandomWords). Ensuite, nous faisons appel à la méthode que nous avons déplacé.
+A la fin du `main.dart` tapez simplement `stful` et l'IDE génère le code pour vous. Il ne reste qu'à nommer le widget (RandomWords). Ensuite, nous déplaçons le code au bon endroit.
 
 
 ```dart
-import 'dart:math';
+import 'package:app_one/model/Mots.dart';
 import 'package:flutter/material.dart';
-import 'package:list_french_words/list_french_words.dart';
-import 'package:recase/recase.dart';
 
-import 'Mots.dart';
-
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Salut Fluttos',
+      title: 'Salut Flutter',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Salut Les Fluttos'),
+          title: Text('Salut les Flutterinos'),
         ),
-        body:  Center(
-          child: RandomWords(),// remplacement par le widget
+        body: Center(
+          child: RandomWords(),
         ),
       ),
     );
   }
 }
-// notre statefull widget
-  class RandomWords extends StatefulWidget {
-    @override
-    _RandomWordsState createState() => _RandomWordsState();
+
+class RandomWords extends StatefulWidget {
+  @override
+  _RandomWordsState createState() => _RandomWordsState();
+}
+
+class _RandomWordsState extends State<RandomWords> {
+  @override
+  Widget build(BuildContext context) {
+
+    return Text(
+      new Mots().random(),
+      style: TextStyle(fontSize: 24.0),
+    );
   }
-// son état
-  class _RandomWordsState extends State<RandomWords> {
-    @override
-    Widget build(BuildContext context) {
-      final word = genMot();
-      return Text(word);
-    }
-  }
+}
 ```
 
 Si vous lancez ce code les changements ne sont pas visibles mais ils seront utils juste après quand nous allons générer plusieurs mots dans une liste.
 
 ## Faisons une liste déroulante
 
-D'abord, on va créer une classe `Mot` qui nous permettra de générer nos mots.
+D'abord, on va créer une méthode qui nous permettra de générer nos mots.
 Modifiez le fichier `Mots.dart`.
 
 ```dart
 import 'dart:math';
-import 'package:recase/recase.dart';
+
 import 'package:list_french_words/list_french_words.dart';
+import 'package:recase/recase.dart';
 
-class Mot {
-  String mot;
+class Mots {
+  final nb = list_french_words.length;
+/// génère un mot aléatoirement
+  random(){
+    var rd = new Random();
+    int rdFix = rd.nextInt(nb-1);
+    return list_french_words[rdFix];
+  }
 
-//constructeur
-  Mot(){
-    this.mot = genMot();
-  }
-// Méthode de génération aléatoire
-  String genMot() {
-    var rand = new Random();
-    var numMot = rand.nextInt(list_french_words.length);
-    var mot = list_french_words[numMot];
-    this.mot = mot.pascalCase;
-    return mot;
-  }
-// Méthode de formatage
-  String formatPas(){
-    return mot.pascalCase;
+  /// génère une liste aléatoire de 10 mots
+  /// de type ReCase
+   generateMots() {
+    var list = <ReCase>[];
+    for (int i=0; i<11;i++){
+      list.add(new ReCase(random()));
+    }
+    return list;
   }
 }
 ```
@@ -250,7 +244,6 @@ On a d'abord besoin de 2 constantes:
 ```dart
 class _RandomWordsState extends State<RandomWords> {
   final List<Mot> _suggestions = <Mot>[];
-  final _biggerFont = TextStyle(fontSize: 18.0);
   ...
 ```
 
@@ -258,22 +251,16 @@ Puis on ajoute une méthode qui va créer la ListView.
 
 
 ```dart
- Widget _buildSuggestions() {
+  Widget _buildSuggestions() {
+    var mot = new Mots();
     return ListView.builder(
-        padding: const EdgeInsets.all(16),
-        // Le builder est appelé à chaque génération de mot et ajoute un séparateur pour les i impaires et une ligne avec un mot pour les i paires
-        itemBuilder: (BuildContext _context, int i) {
-          // ajout d'un séparateur avant chaque ligne
-          if (i.isOdd) {
-            return Divider();
-          }
-          //On récupère l'index grace à une division entière pour en lever les séparateurs
-          final int index = i ~/ 2;
-          // Si on atteint la fin des mot disponibles
+        padding: EdgeInsets.all(16.0),
+        itemBuilder: /*1*/ (context, i) {
+          if (i.isOdd) return Divider(); /*2*/
+
+          final index = i ~/ 2; /*3*/
           if (index >= _suggestions.length) {
-            //on génère d'autre mots
-            Iterable<Mot> generatedMot = [Mot(), Mot(), Mot(), Mot()];
-            _suggestions.addAll(generatedMot);
+            _suggestions.addAll(mot.generateMots()); /*4*/
           }
           return _buildRow(_suggestions[index]);
         });
@@ -283,11 +270,11 @@ Puis on ajoute une méthode qui va créer la ListView.
 La méthode `_buildSuggestions` fait appelle à la méthode `_buildrow` qui construit les lignes
 
 ```dart
-Widget _buildRow(Mot suggestion) {
+Widget _buildRow(ReCase suggestion) {
     return ListTile(
       title: Text(
-        suggestion.formatPas(),
-        style: _biggerFont,
+        suggestion.pascalCase,
+        style: TextStyle(fontSize: 24.0),
       ),
     );
   }
@@ -299,74 +286,48 @@ On modifie maintenant la méthode `build` du `_RandomWordsState` pour utiliser c
 ```dart
 @override
   Widget build(BuildContext context) {
-    //final word = Mot(); on supprime ça
-    //return Text(word.formatPas()); et ça
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen, // un peu de style ça fait pas de mal
-        title: Text('Salut Fluttos'),
-      ),
-      body: _buildSuggestions(), // notre méthode est appelée ici
-    );
+    return _buildSuggestions();
   }
-```
-
-On fait la même chose pour la méthode `build` de `MyApp`
-
-
-```dart
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // enlever le bandeau debug
-      title: 'Salut Fluttos',
-      home: RandomWords(), // notre travail précédent
-    );
-  }
-}
 ```
 
 Voilà !!! Vous devriez obtenir quelque chose comme ça
 
-![flutlist](/img/flutter/flutlist.png)
+![flutlist](/img/flutter/flutlistios.png)
 
 ## Un peu plus de style et des interactions
 
-Nous allons ajouter des icones à notre design et faire un eu de mise en place pour la suite.
+Nous allons ajouter des icônes à notre design et faire un peu de mise en place pour la suite.
 
 D'abord ajoutez la constante pour sauvegarder les interactions
 
 ```dart
 ...
 class _RandomWordsState extends State<RandomWords> {
-  final List<Mot> _suggestions = <Mot>[];
-  final _saved = Set<Mot>();// ici
-  final _biggerFont = TextStyle(fontSize: 18.0);
+  final _suggestions = <ReCase>[];
+  final _saved = <ReCase>{};
 ```
 
 On ajoute aussi `alreadySaved` à la méthode `_buildRow` pour s'assurer que la mot n'a pas été ajouté aux favoris.
 
 ```dart
-Widget _buildRow(Mot suggestion) {
+Widget _buildRow(ReCase suggestion) {
     final alreadySaved = _saved.contains(suggestion); //ici
     ...
 ```
 
 Enfin, on ajoute les icones qui auront deux états.
 
-
 ```dart
-  Widget _buildRow(Mot suggestion) {
-    final alreadySaved = _saved.contains(suggestion);
+  Widget _buildRow(ReCase suggestion) {
+    final alreadySaved =_saved.contains(suggestion);
     return ListTile(
       title: Text(
-        suggestion.formatPas(),
-        style: _biggerFont,
+        suggestion.pascalCase,
+        style: TextStyle(fontSize: 24.0),
       ),
-      trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border, // un coeur plein si sauvé, un coeur vide sinon
-        color: alreadySaved ? Colors.red : null, // rouge ou vide
+      trailing: Icon(   // ici..
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
       ),
     );
   }
@@ -374,7 +335,7 @@ Enfin, on ajoute les icones qui auront deux états.
 
 Tada...
 
-![coeur](/img/flutter/icons.png)
+![coeur](/img/flutter/coeurios.png)
 
 > Pour le moment nous n'avons pas d'interactions.
 
@@ -404,4 +365,101 @@ Widget _buildRow(Mot suggestion) {
     );
   }
 ```
+
+Je ne fais pas de screen mais maintenant les cœurs sont cliquables et s'affichent en rouge.
+
+## On ajoute une vue avec les éléments sélectionnés
+
+Pour faire ça on va d'abord ajouter une action sur notre `appBar` dans la méthode build de `_RandomWordsState`
+
+```dart
+ @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mot aléatoires'),
+        actions: [ //ici
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+        ],
+      ),
+
+      body: _buildSuggestions(),
+    );
+  }
+```
+
+La fonction `_pushSaved` est donc à créer:
+
+```dart
+void _pushSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          final tiles = _saved.map(
+                (ReCase pair) {
+              return ListTile(
+                title: Text(
+                  pair.pascalCase,
+                  style: TextStyle(fontSize: 24.0),
+                ),
+              );
+            },
+          );
+          final divided = ListTile.divideTiles(
+            context: context,
+            tiles: tiles,
+          ).toList();
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Suggestions sauvées'),
+            ),
+            body: ListView(children: divided),
+          );
+        },
+      ),
+    );
+  }
+```
+
+Cette méthode va créer une nouvelle page à partir des mots que nous aurons sélectionnés.
+
+## Dernier make-up
+
+Nous avons deux barres et une couleur inadaptée. Pour les barres, on va modifier la méthode `build` de `MyApp`
+
+```dart
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mes Mots',
+      home: RandomWords()
+    );
+  }
+}
+```
+
+Enfin un peu d'esthetique:
+
+```dart
+@override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(
+      title: 'Mes Mots',
+      debugShowCheckedModeBanner: false, // cacher le ruban debug
+      theme: ThemeData(
+        primaryColor: Colors.white // le blanc c'est plus chic
+      ),
+      home: RandomWords()
+    );
+  }
+```
+
+ Et voilà
+
+![screen1](/img/flutter/screen1.png)     ![screen1](/img/flutter/screen2.png)
+
 

@@ -1,0 +1,11 @@
+@startuml entity
+entity Depo {
+	string name
+	srting url
+}
+entity CoursVideo {
+	string name
+	string url
+	text description
+}
+@enduml
