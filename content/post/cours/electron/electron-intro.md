@@ -387,4 +387,90 @@ Le protocole `file://` est utilisé pour charger un fichier à partir du systèm
 
 ![image](/img/electron/image.png)
 
+## Ce n'est pas fini
 
+Je ne vous ai pas tout dit. Dans la version 12 d'Electron, l'intégration de node et l'isolation ont des paramètre par défaut pour une bonne raison. Ce sont des portes ouvertes aux logiciels malicieux. Un script peut avoir accès à votre système en passant par le renderer directement. CE N'EST PAS BON !
+
+### Corrigeons ça
+
+On va désactiver les deux options dans le `main.js` au niveau du `BrowserWindow`:
+
+```js
+const openWindow = ( type ) => {
+    const win = new BrowserWindow( {
+        width: 600,
+        height: 300,
+        webPreferences: {
+            preload: path.join(__dirname,'preload.js')
+        },
+    } );
+```
+
+Comme vous le voyez on ajoute également un préloader. Ce fichier sera chargé à partir du main et pas de la fenêtre.
+
+> Si vous relancez maintenant, plus rien ne fonctionne évidemment.
+
+Ajoutez le fichier `preload.js` dans le projet.
+
+```js
+const { ipcRenderer } = require( 'electron' );
+
+window.addEventListener('DOMContentLoaded', () => {
+	const btn1 = document.getElementById('btn')
+	if (btn !== null){
+		btn1.onclick = function() {
+			ipcRenderer.send( 'app:display-image' );
+			console.log( '[message sent]', 'app:display-image' );
+		}
+	}
+  })
+```
+
+et on enlève le script de `hello.html`. Dans le détail, que ce passe-t-il? On ajoute un écouteur à la fenêtre qui déclenche une méthode quand la page est chargée.
+On récupère alors l'élément portant l'id `btn`. Je triche un peu pour la suite en vérifiant que l'objet n'est pas null car je vais utiliser le même préloader pour plusieurs pages.
+Si cet objet n'est pas null on fait ce que l'on faisait avant directement dans le html dans la balise `<script>...</script>`.
+
+Le même travail est à faire pour `image.html` donc toujours dans `preloader.js` nous ajoutons ce qu'il manque et nous le supprimons de `image.html`
+
+```js
+const { ipcRenderer } = require( 'electron' );
+const path = require( 'path' );
+const axios = require( 'axios' );
+const sharp = require( 'sharp' );
+
+
+window.addEventListener('DOMContentLoaded', () => {
+	const btn1 = document.getElementById('btn')
+	const btn2 = document.getElementById('btn2')
+	const img = document.getElementById('img')
+	const loading = document.getElementById('loading')
+	if (btn !== null){
+		btn1.onclick = function() {
+			ipcRenderer.send( 'app:display-image' );
+			console.log( '[message sent]', 'app:display-image' );
+		}
+	}
+	if (img !== null && loading !== null){
+		axios.get( 'https://source.unsplash.com/random', {
+		responseType: 'arraybuffer',
+	} )
+	.then( ( response ) => {
+
+		const buffer = Buffer.from( response.data, 'binary' );
+		const outPath = path.resolve( __dirname, 'img.jpeg' );
+		sharp( buffer )
+		.resize( 600, 300 )
+		.toFile( outPath ) 
+		.then( () => {
+			img.setAttribute( 'src', `file://${ outPath }` );
+			img.setAttribute( 'style', '' );
+			loading.setAttribute( 'style', 'display:none;' );
+		} );
+	} );
+	}
+  })
+```
+
+Dernière remarque, nous utilisons le même `BrowserWindow` et de ce fait le même preloader. Il faut donc toujours s'assurer que nos objets sont bien récupérés.
+
+Voilà l'application refonctionne et nous respectons les consignes de sécurité.
