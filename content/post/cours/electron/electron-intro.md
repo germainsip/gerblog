@@ -17,6 +17,7 @@ mathjax: true
 ---
 # Electron
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLDgCz2YzJLyWK7uQvHBnciTrJ_Ed76Vhu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## L'architecture d'electron
 
