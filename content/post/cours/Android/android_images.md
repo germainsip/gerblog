@@ -226,4 +226,4 @@ Modifiez la méthode onClick() pour obtenir:
 
 Ainsi, maintenant, quand on clique sur le fab. On ouvre une nouvelle activité.
 
-> Dans la vidéo je vous montre comment changer son aspect également.
+
