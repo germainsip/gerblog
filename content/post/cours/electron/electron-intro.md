@@ -476,4 +476,4 @@ Dernière remarque, nous utilisons le même `BrowserWindow` et de ce fait le mê
 
 Voilà l'application refonctionne et nous respectons les consignes de sécurité.
 
-Bientôt la suite... re
+Bientôt la suite...
