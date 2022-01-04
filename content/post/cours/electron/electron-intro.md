@@ -475,3 +475,5 @@ window.addEventListener('DOMContentLoaded', () => {
 Dernière remarque, nous utilisons le même `BrowserWindow` et de ce fait le même preloader. Il faut donc toujours s'assurer que nos objets sont bien récupérés.
 
 Voilà l'application refonctionne et nous respectons les consignes de sécurité.
+
+Bientôt la suite...
