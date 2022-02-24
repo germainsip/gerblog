@@ -223,7 +223,7 @@ solution à la branche `2-binding-fin`.
 
 Avec Vue, nous pouvons faire du "rendue conditionnel". C'est à dire afficher quelque chose en fonction d'une condition.
 
-Par exmple, nous pourrions afficher si la chaussette choisie est en stock ou non.
+Par exemple, nous pourrions afficher si la chaussette choisie est en stock ou non.
 
 Ajoutons les deux propositions dans l'html:
 
