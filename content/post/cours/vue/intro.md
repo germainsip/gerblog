@@ -135,6 +135,8 @@ Vous aurez la solution en accédant à la branche `1-intro-fin`.
 
 ## Le binding
 
+{{< youtube M9ZLromaCg8 >}}
+
 Pour ceux qui voudraient commencer à partir du même point. Passez sur la branche `2-binding-debut`.
 
 J'ai ajouté une balise dans notre html:
@@ -224,6 +226,8 @@ En guise d'exercice, ajoutez une propriété url dans l'application et bindez la
 solution à la branche `2-binding-fin`.
 
 ## Le rendu conditionnel
+
+{{< youtube aQir8flAuR8>}}
 
 Avec Vue, nous pouvons faire du "rendue conditionnel". C'est à dire afficher quelque chose en fonction d'une condition.
 
