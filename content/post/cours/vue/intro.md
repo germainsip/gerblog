@@ -53,7 +53,7 @@ Par exemple:
 
 vous pouvez déjà cloner ce dépot pour partir de ce niveau.
 
-`git clone https://github.com/germainsip/vuecdn.git && cd vuecdn.git`
+`git clone https://github.com/germainsip/vuecdn.git && cd vuecdn`
 
 puis `git checkout 1-intro-debut`
 
