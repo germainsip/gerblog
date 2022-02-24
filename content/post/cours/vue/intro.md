@@ -21,6 +21,10 @@ Vue est conçu pour être "progressif". C'est à dire qu'il conviendra à plusie
 
 ## Commencer avec Vue
 
+{{< youtube 3xcaxX9onm0 >}}
+
+
+
 ### Le CDN
 
 En allant sur la doc de Vue vous trouverez le [CDN](https://vuejs.org/guide/quick-start.html#without-build-tools) permettant d'intégrer directement vue à une page html.
